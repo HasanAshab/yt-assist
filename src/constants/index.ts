@@ -44,8 +44,8 @@ export const STORAGE_KEYS = {
 
 // API endpoints and configuration
 export const API_CONFIG = {
-  SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL || '',
-  SUPABASE_ANON_KEY: import.meta.env.VITE_SUPABASE_ANON_KEY || ''
+  SUPABASE_URL: import.meta.env.VITE_PUBLIC_SUPABASE_URL || '',
+  SUPABASE_ANON_KEY: import.meta.env.VITE_PUBLIC_SUPABASE_ANON_KEY || ''
 } as const;
 
 // Stage validation requirements

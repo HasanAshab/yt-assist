@@ -124,7 +124,7 @@ export interface AppState {
 }
 
 // Additional types
-export type ContentFlag = 
+export type ContentFlag =
   | 'fans_feedback_analysed'
   | 'overall_feedback_analysed';
 
