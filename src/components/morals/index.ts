@@ -1,0 +1,1 @@
+export { MoralsList } from './MoralsList';
