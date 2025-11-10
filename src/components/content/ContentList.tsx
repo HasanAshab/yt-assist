@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import type { Content, ContentFilters } from '../../types';
-import { CONTENT_STAGES, CONTENT_CATEGORIES } from '../../constants';
+import { CONTENT_STAGES } from '../../constants';
 import { useContent } from '../../hooks/useContent';
 import { ContentCard } from './ContentCard';
 import { VirtualizedContentList } from './VirtualizedContentList';

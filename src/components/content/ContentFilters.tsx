@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import type { ContentFilters as ContentFiltersType } from '../../types';
-import { CONTENT_STAGES, CONTENT_CATEGORIES } from '../../constants';
+import { CONTENT_STAGES } from '../../constants';
+import { useContent } from '../../hooks/useContent';
 
 interface ContentFiltersComponentProps {
   filters: ContentFiltersType;
@@ -17,8 +18,21 @@ export const ContentFilters: React.FC<ContentFiltersComponentProps> = ({
   hasActiveFilters,
   className = ''
 }) => {
+  const { contents } = useContent();
+
+  // Get unique categories from existing content
+  const availableCategories = useMemo(() => {
+    const categories = contents
+      .map(content => content.category)
+      .filter(category => category && category.trim()) // Filter out empty/null categories
+      .filter((category, index, array) => array.indexOf(category) === index) // Remove duplicates
+      .sort(); // Sort alphabetically
+    
+    return categories;
+  }, [contents]);
+
   const handleCategoryChange = (category: string) => {
-    const newCategory = category === 'all' ? undefined : category as 'Demanding' | 'Innovative';
+    const newCategory = category === 'all' ? undefined : category;
     onFilterChange({ category: newCategory });
   };
 
@@ -48,11 +62,15 @@ export const ContentFilters: React.FC<ContentFiltersComponentProps> = ({
             className="text-sm border border-gray-300 rounded-md px-3 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="all">All Categories</option>
-            {CONTENT_CATEGORIES.map((category) => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
+            {availableCategories.length === 0 ? (
+              <option disabled>No categories available</option>
+            ) : (
+              availableCategories.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))
+            )}
           </select>
         </div>
         

@@ -839,6 +839,25 @@ export class ContentService {
   }
 
   /**
+   * Get unique categories from all contents
+   */
+  static async getUniqueCategories(): Promise<string[]> {
+    try {
+      const contents = await this.getContents();
+      const categories = contents
+        .map(content => content.category)
+        .filter(category => category && category.trim()) // Filter out empty/null categories
+        .filter((category, index, array) => array.indexOf(category) === index) // Remove duplicates
+        .sort(); // Sort alphabetically
+      
+      return categories;
+    } catch (error) {
+      console.error('Error fetching unique categories:', error);
+      return [];
+    }
+  }
+
+  /**
    * Validate URL format
    */
   private static isValidUrl(url: string): boolean {
