@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { ROUTES } from '../../constants';
 import { Dashboard } from '../../components/dashboard/Dashboard';
 import { ContentPage } from '../../pages/ContentPage';
+import { ContentManagementPage } from '../../pages/ContentManagementPage';
 import { TasksPage } from '../../pages/TasksPage';
 import { MoralsList } from '../../components/morals/MoralsList';
 import { PublicationSuggestions } from '../../components/suggestions/PublicationSuggestions';
@@ -23,6 +24,7 @@ export function AppRouter() {
       <Route path={ROUTES.HOME} element={<Navigate to={ROUTES.DASHBOARD} replace />} />
       <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
       <Route path={ROUTES.CONTENT} element={<ContentPage />} />
+      <Route path={ROUTES.CONTENT_MANAGEMENT} element={<ContentManagementPage />} />
       <Route path={ROUTES.TASKS} element={<TasksPage />} />
       <Route path="/suggestions" element={<PublicationSuggestions />} />
       <Route path={ROUTES.MORALS} element={<MoralsList />} />

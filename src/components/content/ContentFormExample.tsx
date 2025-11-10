@@ -43,11 +43,7 @@ export const ContentFormExample: React.FC = () => {
     current_stage: 2,
     title: 'Example Title',
     script: 'This is an example script that meets the minimum length requirements for content validation.',
-    final_checks: [
-      { id: 'check1', text: 'Content reviewed for accuracy', completed: true },
-      { id: 'check2', text: 'SEO optimization completed', completed: false },
-      { id: 'check3', text: 'Thumbnail approved', completed: false }
-    ],
+    final_checks: [],
     publish_after: '',
     publish_before: '',
     link: 'https://example.com/video',

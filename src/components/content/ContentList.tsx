@@ -14,6 +14,7 @@ interface ContentListProps {
   onContentSelect?: (content: Content) => void;
   onContentEdit?: (content: Content) => void;
   onContentDelete?: (content: Content) => void;
+  onContentView?: (content: Content) => void;
   showFilters?: boolean;
   showSearch?: boolean;
   layout?: 'grid' | 'list';
@@ -24,6 +25,7 @@ export const ContentList: React.FC<ContentListProps> = ({
   onContentSelect,
   onContentEdit,
   onContentDelete,
+  onContentView,
   showFilters = true,
   showSearch = true,
   layout = 'grid'
@@ -175,6 +177,7 @@ export const ContentList: React.FC<ContentListProps> = ({
           onContentSelect={onContentSelect}
           onContentEdit={onContentEdit}
           onContentDelete={onContentDelete}
+          onContentView={onContentView}
         />
       ) : (
         // Use regular rendering for smaller datasets
@@ -193,6 +196,7 @@ export const ContentList: React.FC<ContentListProps> = ({
               onSelect={onContentSelect}
               onEdit={onContentEdit}
               onDelete={onContentDelete}
+              onView={onContentView}
             />
           ))}
         </div>

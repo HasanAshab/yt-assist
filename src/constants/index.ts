@@ -18,19 +18,14 @@ export const CONTENT_STAGES = [
 export const CONTENT_CATEGORIES = ['Demanding', 'Innovative'] as const;
 
 // Default final checks for new content
-export const DEFAULT_FINAL_CHECKS = [
-  'Content reviewed for accuracy',
-  'SEO optimization completed',
-  'Thumbnail approved',
-  'Description finalized',
-  'Tags and categories set'
-];
+export const DEFAULT_FINAL_CHECKS = [];
 
 // Application routes
 export const ROUTES = {
   HOME: '/',
   DASHBOARD: '/dashboard',
   CONTENT: '/content',
+  CONTENT_MANAGEMENT: '/content/manage',
   TASKS: '/tasks',
   MORALS: '/morals',
   SETTINGS: '/settings'

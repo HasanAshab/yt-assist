@@ -132,12 +132,12 @@ export class ContentService {
         topic: contentData.topic,
         category: contentData.category,
         current_stage: 0, // Always start at Pending
-        title: contentData.title,
-        script: contentData.script,
+        title: contentData.title || null,
+        script: contentData.script || null,
         final_checks: this.createDefaultFinalChecks(),
-        publish_after: contentData.publish_after,
-        publish_before: contentData.publish_before,
-        link: contentData.link,
+        publish_after: contentData.publish_after || null,
+        publish_before: contentData.publish_before || null,
+        link: contentData.link || null,
         morals: contentData.morals || [],
         flags: []
       };
@@ -206,11 +206,11 @@ export class ContentService {
       const updateData: ContentUpdate = {
         topic: updates.topic,
         category: updates.category,
-        title: updates.title,
-        script: updates.script,
-        publish_after: updates.publish_after,
-        publish_before: updates.publish_before,
-        link: updates.link,
+        title: updates.title || null,
+        script: updates.script || null,
+        publish_after: updates.publish_after || null,
+        publish_before: updates.publish_before || null,
+        link: updates.link || null,
         morals: updates.morals,
         updated_at: new Date().toISOString()
       };
@@ -509,33 +509,37 @@ export class ContentService {
   ): Promise<ValidationResult> {
     const errors: string[] = [];
 
+    // Normalize empty strings to undefined
+    const normalizedPublishAfter = publishAfter?.trim() || undefined;
+    const normalizedPublishBefore = publishBefore?.trim() || undefined;
+
     // Check publish_after dependency exists
-    if (publishAfter) {
-      const dependency = await this.getContentByTopic(publishAfter);
+    if (normalizedPublishAfter) {
+      const dependency = await this.getContentByTopic(normalizedPublishAfter);
       if (!dependency) {
-        errors.push(`Dependency "${publishAfter}" does not exist`);
+        errors.push(`Dependency "${normalizedPublishAfter}" does not exist`);
       }
     }
 
     // Check publish_before dependency exists
-    if (publishBefore) {
-      const dependency = await this.getContentByTopic(publishBefore);
+    if (normalizedPublishBefore) {
+      const dependency = await this.getContentByTopic(normalizedPublishBefore);
       if (!dependency) {
-        errors.push(`Dependency "${publishBefore}" does not exist`);
+        errors.push(`Dependency "${normalizedPublishBefore}" does not exist`);
       }
     }
 
     // Prevent circular dependencies
-    if (publishAfter && publishBefore && publishAfter === publishBefore) {
+    if (normalizedPublishAfter && normalizedPublishBefore && normalizedPublishAfter === normalizedPublishBefore) {
       errors.push('Cannot have the same content as both publish_after and publish_before');
     }
 
     // Prevent self-dependency
     if (currentTopic) {
-      if (publishAfter === currentTopic) {
+      if (normalizedPublishAfter === currentTopic) {
         errors.push('Content cannot depend on itself (publish_after)');
       }
-      if (publishBefore === currentTopic) {
+      if (normalizedPublishBefore === currentTopic) {
         errors.push('Content cannot depend on itself (publish_before)');
       }
     }

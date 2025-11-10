@@ -2,6 +2,7 @@ import React from 'react';
 import type { Content } from '../../types';
 import { CONTENT_STAGES } from '../../constants';
 import { StageIndicator } from './StageIndicator';
+import { ContentActions } from './ContentActions';
 
 interface ContentCardProps {
   content: Content;
@@ -9,6 +10,7 @@ interface ContentCardProps {
   onSelect?: (content: Content) => void;
   onEdit?: (content: Content) => void;
   onDelete?: (content: Content) => void;
+  onView?: (content: Content) => void;
   className?: string;
 }
 
@@ -18,6 +20,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
   onSelect,
   onEdit,
   onDelete,
+  onView,
   className = ''
 }) => {
   const currentStage = CONTENT_STAGES[content.current_stage];
@@ -110,30 +113,14 @@ export const ContentCard: React.FC<ContentCardProps> = ({
             </div>
           </div>
           
-          <div className="flex items-center gap-2 ml-4">
-            {onEdit && (
-              <button
-                onClick={handleEditClick}
-                className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
-                title="Edit content"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                </svg>
-              </button>
-            )}
-            
-            {onDelete && (
-              <button
-                onClick={handleDeleteClick}
-                className="p-2 text-gray-400 hover:text-red-600 transition-colors"
-                title="Delete content"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
-              </button>
-            )}
+          <div className="ml-4">
+            <ContentActions
+              content={content}
+              onEdit={onEdit}
+              onView={onView}
+              onDelete={onDelete}
+              compact={true}
+            />
           </div>
         </div>
         
@@ -175,30 +162,14 @@ export const ContentCard: React.FC<ContentCardProps> = ({
           </span>
         </div>
         
-        <div className="flex items-center gap-1 ml-2">
-          {onEdit && (
-            <button
-              onClick={handleEditClick}
-              className="p-1.5 text-gray-400 hover:text-gray-600 transition-colors"
-              title="Edit content"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-              </svg>
-            </button>
-          )}
-          
-          {onDelete && (
-            <button
-              onClick={handleDeleteClick}
-              className="p-1.5 text-gray-400 hover:text-red-600 transition-colors"
-              title="Delete content"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-              </svg>
-            </button>
-          )}
+        <div className="ml-2">
+          <ContentActions
+            content={content}
+            onEdit={onEdit}
+            onView={onView}
+            onDelete={onDelete}
+            compact={true}
+          />
         </div>
       </div>
       

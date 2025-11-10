@@ -9,6 +9,7 @@ interface VirtualizedContentListProps {
   onContentSelect?: (content: Content) => void;
   onContentEdit?: (content: Content) => void;
   onContentDelete?: (content: Content) => void;
+  onContentView?: (content: Content) => void;
   className?: string;
 }
 
@@ -29,6 +30,7 @@ export const VirtualizedContentList: React.FC<VirtualizedContentListProps> = ({
   onContentSelect,
   onContentEdit,
   onContentDelete,
+  onContentView,
   className = ''
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -91,6 +93,7 @@ export const VirtualizedContentList: React.FC<VirtualizedContentListProps> = ({
             onSelect={onContentSelect}
             onEdit={onContentEdit}
             onDelete={onContentDelete}
+            onView={onContentView}
           />
         </div>
       );
@@ -111,6 +114,7 @@ export const VirtualizedContentList: React.FC<VirtualizedContentListProps> = ({
               onSelect={onContentSelect}
               onEdit={onContentEdit}
               onDelete={onContentDelete}
+              onView={onContentView}
             />
           ))}
         </div>
@@ -136,6 +140,7 @@ export const VirtualizedContentList: React.FC<VirtualizedContentListProps> = ({
                 onSelect={onContentSelect}
                 onEdit={onContentEdit}
                 onDelete={onContentDelete}
+                onView={onContentView}
               />
             ))}
           </div>
@@ -149,6 +154,7 @@ export const VirtualizedContentList: React.FC<VirtualizedContentListProps> = ({
                 onSelect={onContentSelect}
                 onEdit={onContentEdit}
                 onDelete={onContentDelete}
+                onView={onContentView}
               />
             ))}
           </div>

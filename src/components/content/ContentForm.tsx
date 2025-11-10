@@ -136,10 +136,10 @@ export const ContentForm: React.FC<ContentFormProps> = ({
         
       case 'publish_after':
       case 'publish_before':
-        if (value && value === formData.topic) {
+        if (value && value.trim() && value === formData.topic) {
           return 'Content cannot depend on itself';
         }
-        if (formData.publish_after && formData.publish_before && 
+        if (formData.publish_after?.trim() && formData.publish_before?.trim() && 
             formData.publish_after === formData.publish_before) {
           return 'Cannot have the same content as both dependencies';
         }
@@ -202,6 +202,18 @@ export const ContentForm: React.FC<ContentFormProps> = ({
     return Object.keys(newErrors).length === 0;
   }, [formData, validateField]);
 
+  // Normalize form data (convert empty strings to undefined)
+  const normalizeFormData = useCallback((data: ContentFormData): ContentFormData => {
+    return {
+      ...data,
+      title: data.title?.trim() || undefined,
+      script: data.script?.trim() || undefined,
+      publish_after: data.publish_after?.trim() || undefined,
+      publish_before: data.publish_before?.trim() || undefined,
+      link: data.link?.trim() || undefined
+    };
+  }, []);
+
   // Handle form submission
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
@@ -215,14 +227,15 @@ export const ContentForm: React.FC<ContentFormProps> = ({
 
     try {
       let result: Content;
+      const normalizedData = normalizeFormData(formData);
       
       if (editingContent) {
         // Update existing content
-        result = await ContentService.updateContent(editingContent.id, formData);
+        result = await ContentService.updateContent(editingContent.id, normalizedData);
         updateContent(result);
       } else {
         // Create new content
-        result = await ContentService.createContent(formData);
+        result = await ContentService.createContent(normalizedData);
         addContent(result);
       }
 
@@ -241,7 +254,7 @@ export const ContentForm: React.FC<ContentFormProps> = ({
     } finally {
       setIsSubmitting(false);
     }
-  }, [formData, finalChecks, editingContent, validateForm, addContent, updateContent, onSubmit, onClose, handleError]);
+  }, [formData, finalChecks, editingContent, validateForm, normalizeFormData, addContent, updateContent, onSubmit, onClose, handleError]);
 
   // Handle modal close
   const handleClose = useCallback(() => {

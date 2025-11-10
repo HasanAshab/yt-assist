@@ -114,10 +114,7 @@ export const TaskManager: React.FC<TaskManagerProps> = ({ className = '' }) => {
     if (task.link) {
       TaskService.handleTaskRedirection(task);
     }
-  };
-
-  console.log(tasks);
-  
+  };  
 
   const userTasks = tasks.filter(task => task.type === 'user');
   const systemTasks = tasks.filter(task => task.type === 'system');
