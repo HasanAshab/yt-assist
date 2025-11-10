@@ -13,7 +13,12 @@ type AppAction =
   | { type: 'SET_TASKS'; payload: Task[] }
   | { type: 'ADD_TASK'; payload: Task }
   | { type: 'UPDATE_TASK'; payload: Task }
-  | { type: 'DELETE_TASK'; payload: string };
+  | { type: 'DELETE_TASK'; payload: string }
+  | { type: 'SET_DEFAULT_FINAL_CHECKS'; payload: string[] }
+  | { type: 'UPDATE_SETTINGS'; payload: Partial<Settings> }
+  | { type: 'SET_AUTHENTICATED'; payload: boolean }
+  | { type: 'SET_LAST_AUTH_TIME'; payload: number }
+  | { type: 'LOGOUT' };
 
 // Initial state
 const initialState: AppState = {
@@ -145,6 +150,48 @@ function appReducer(state: AppState, action: AppAction): AppState {
           ...state.tasks,
           loading: action.payload
         }
+      };
+    
+    case 'SET_DEFAULT_FINAL_CHECKS':
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          defaultFinalChecks: action.payload
+        }
+      };
+    
+    case 'UPDATE_SETTINGS':
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          ...action.payload
+        }
+      };
+    
+    case 'SET_AUTHENTICATED':
+      return {
+        ...state,
+        user: state.user ? {
+          ...state.user,
+          isAuthenticated: action.payload
+        } : undefined
+      };
+    
+    case 'SET_LAST_AUTH_TIME':
+      return {
+        ...state,
+        user: state.user ? {
+          ...state.user,
+          lastAuthTime: action.payload.toString()
+        } : undefined
+      };
+    
+    case 'LOGOUT':
+      return {
+        ...state,
+        user: undefined
       };
     
     default:

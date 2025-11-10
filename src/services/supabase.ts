@@ -12,7 +12,7 @@ if (!API_CONFIG.SUPABASE_ANON_KEY) {
 }
 
 // Create Supabase client with type safety
-export const supabase = createClient<Database>(
+export const supabase = createClient(
   API_CONFIG.SUPABASE_URL,
   API_CONFIG.SUPABASE_ANON_KEY,
   {

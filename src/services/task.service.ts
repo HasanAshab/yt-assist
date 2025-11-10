@@ -21,7 +21,7 @@ export class TaskService {
       }
 
       // Transform database rows to Task objects
-      return (data || []).map(row => ({
+      return (data || []).map((row: any) => ({
         id: row.id,
         title: row.title,
         description: row.description || '',
@@ -57,7 +57,7 @@ export class TaskService {
           type,
           expires_at: expiresAt,
           link: taskData.link || null
-        })
+        } as any)
         .select()
         .single();
 
@@ -70,17 +70,18 @@ export class TaskService {
       }
 
       // Transform database row to Task object
+      const taskData_result = data as any;
       return {
-        id: data.id,
-        title: data.title,
-        description: data.description || '',
+        id: taskData_result.id,
+        title: taskData_result.title,
+        description: taskData_result.description || '',
         completed: false,
-        created_at: data.created_at,
-        updated_at: data.created_at,
-        expires_at: data.expires_at,
-        due_date: data.expires_at,
-        type: data.type,
-        link: data.link || undefined
+        created_at: taskData_result.created_at,
+        updated_at: taskData_result.created_at,
+        expires_at: taskData_result.expires_at,
+        due_date: taskData_result.expires_at,
+        type: taskData_result.type,
+        link: taskData_result.link || undefined
       };
     } catch (error) {
       console.error('Error creating task:', error);
@@ -155,12 +156,12 @@ export class TaskService {
         handleSupabaseError(allError);
       }
 
-      const tasks = allTasks || [];
-      const activeTasks = tasks.filter(task => task.expires_at > now);
-      const expiredTasks = tasks.filter(task => task.expires_at <= now);
-      const userTasks = activeTasks.filter(task => task.type === 'user');
-      const systemTasks = activeTasks.filter(task => task.type === 'system');
-      const todaysTasks = activeTasks.filter(task => {
+      const tasks = (allTasks || []) as any[];
+      const activeTasks = tasks.filter((task: any) => task.expires_at > now);
+      const expiredTasks = tasks.filter((task: any) => task.expires_at <= now);
+      const userTasks = activeTasks.filter((task: any) => task.type === 'user');
+      const systemTasks = activeTasks.filter((task: any) => task.type === 'system');
+      const todaysTasks = activeTasks.filter((task: any) => {
         const expiresAt = new Date(task.expires_at);
         return expiresAt >= todayStart && expiresAt <= todayEnd;
       });
@@ -232,5 +233,51 @@ export class TaskService {
     const now = new Date();
     const expirationDate = new Date(task.expires_at || task.due_date || now);
     return expirationDate.getTime() <= now.getTime();
+  }
+
+  static async getTasksByType(type: 'user' | 'system'): Promise<Task[]> {
+    try {
+      const allTasks = await this.getActiveTasks();
+      return allTasks.filter(task => task.type === type);
+    } catch (error) {
+      console.error('Error getting tasks by type:', error);
+      throw new Error(error instanceof Error ? error.message : 'Failed to get tasks by type');
+    }
+  }
+
+  static async getAllTasks(): Promise<Task[]> {
+    try {
+      // Check database connection first
+      const isConnected = await checkDatabaseConnection();
+      if (!isConnected) {
+        throw new Error('Failed to connect to database. Please check your connection and try again.');
+      }
+
+      const { data, error } = await supabase
+        .from(TABLES.TASKS)
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        handleSupabaseError(error);
+      }
+
+      // Transform database rows to Task objects
+      return (data || []).map((row: any) => ({
+        id: row.id,
+        title: row.title,
+        description: row.description || '',
+        completed: false,
+        created_at: row.created_at,
+        updated_at: row.created_at,
+        expires_at: row.expires_at,
+        due_date: row.expires_at,
+        type: row.type,
+        link: row.link || undefined
+      }));
+    } catch (error) {
+      console.error('Error fetching all tasks:', error);
+      throw new Error(error instanceof Error ? error.message : 'Failed to fetch all tasks from database');
+    }
   }
 }

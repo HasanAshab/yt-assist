@@ -1,16 +1,16 @@
 import React from 'react';
-import type { ContentFilters } from '../../types';
+import type { ContentFilters as ContentFiltersType } from '../../types';
 import { CONTENT_STAGES, CONTENT_CATEGORIES } from '../../constants';
 
 interface ContentFiltersComponentProps {
-  filters: ContentFilters;
-  onFilterChange: (filters: Partial<ContentFilters>) => void;
+  filters: ContentFiltersType;
+  onFilterChange: (filters: Partial<ContentFiltersType>) => void;
   onClearFilters: () => void;
   hasActiveFilters: boolean;
   className?: string;
 }
 
-export const ContentFiltersComponent: React.FC<ContentFiltersComponentProps> = ({
+export const ContentFilters: React.FC<ContentFiltersComponentProps> = ({
   filters,
   onFilterChange,
   onClearFilters,

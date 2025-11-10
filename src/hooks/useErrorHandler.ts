@@ -6,6 +6,20 @@ interface ErrorItem {
   timestamp: number;
 }
 
+export class AppError extends Error {
+  public id: string;
+  public type: 'error' | 'warning' | 'info';
+  public context?: string;
+
+  constructor(message: string, public code?: string, type: 'error' | 'warning' | 'info' = 'error', context?: string) {
+    super(message);
+    this.name = 'AppError';
+    this.id = Date.now().toString();
+    this.type = type;
+    this.context = context;
+  }
+}
+
 export function useErrorHandler() {
   const [errors, setErrors] = useState<ErrorItem[]>([]);
 
@@ -37,11 +51,21 @@ export function useErrorHandler() {
     addError(message);
   }, [addError]);
 
+  const handleAsyncError = useCallback(async (asyncFn: () => Promise<any>, defaultMessage?: string, context?: string) => {
+    try {
+      return await asyncFn();
+    } catch (error) {
+      handleError(error, defaultMessage);
+      throw error;
+    }
+  }, [handleError]);
+
   return {
     errors,
     addError,
     removeError,
     clearErrors,
-    handleError
+    handleError,
+    handleAsyncError
   };
 }

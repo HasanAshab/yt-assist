@@ -36,12 +36,12 @@ export const useTasks = () => {
 
   const getActiveTasks = useCallback(() => {
     const now = new Date();
-    return state.tasks.items.filter(task => new Date(task.expires_at) > now);
+    return state.tasks.items.filter(task => task.expires_at && new Date(task.expires_at) > now);
   }, [state.tasks.items]);
 
   const getExpiredTasks = useCallback(() => {
     const now = new Date();
-    return state.tasks.items.filter(task => new Date(task.expires_at) <= now);
+    return state.tasks.items.filter(task => task.expires_at && new Date(task.expires_at) <= now);
   }, [state.tasks.items]);
 
   const getTodaysTasks = useCallback(() => {

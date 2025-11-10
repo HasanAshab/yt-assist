@@ -4,7 +4,7 @@ import { CONTENT_STAGES, CONTENT_CATEGORIES } from '../../constants';
 import { useContent } from '../../hooks/useContent';
 import { ContentCard } from './ContentCard';
 import { VirtualizedContentList } from './VirtualizedContentList';
-import { ContentFiltersComponent } from './ContentFilters';
+import { ContentFilters as ContentFiltersComponent } from './ContentFilters';
 import { SearchInput } from '../common/SearchInput';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import { EmptyState } from '../common/EmptyState';

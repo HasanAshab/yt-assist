@@ -35,7 +35,7 @@ export class DatabaseService {
               'Description finalized',
               'Tags and categories set'
             ]
-          });
+          } as any);
       }
     } catch (error) {
       console.warn('Database initialization warning:', error);
@@ -147,7 +147,7 @@ export class DatabaseService {
     try {
       const { data, error } = await supabase
         .from('contents')
-        .insert(content)
+        .insert(content as any)
         .select()
         .single();
 
@@ -166,7 +166,7 @@ export class DatabaseService {
     try {
       const { data, error } = await supabase
         .from('contents')
-        .update(updates)
+        .update(updates as any)
         .eq('id', id)
         .select()
         .single();
@@ -239,7 +239,7 @@ export class DatabaseService {
     try {
       const { data, error } = await supabase
         .from('tasks')
-        .insert(task)
+        .insert(task as any)
         .select()
         .single();
 
@@ -279,7 +279,7 @@ export class DatabaseService {
         .single();
 
       if (error && error.code !== 'PGRST116') throw error;
-      return data?.value || null;
+      return (data as any)?.value || null;
     } catch (error) {
       handleSupabaseError(error);
       return null;
@@ -293,7 +293,7 @@ export class DatabaseService {
     try {
       const { error } = await supabase
         .from('settings')
-        .upsert({ key, value })
+        .upsert({ key, value } as any)
         .select()
         .single();
 
@@ -322,9 +322,9 @@ export class DatabaseService {
       const tasks = tasksResult.data || [];
 
       return {
-        pendingCount: contents.filter(c => c.current_stage === 0).length,
-        inProgressCount: contents.filter(c => c.current_stage > 0 && c.current_stage < 11).length,
-        publishedCount: contents.filter(c => c.current_stage === 11).length,
+        pendingCount: contents.filter((c: any) => c.current_stage === 0).length,
+        inProgressCount: contents.filter((c: any) => c.current_stage > 0 && c.current_stage < 11).length,
+        publishedCount: contents.filter((c: any) => c.current_stage === 11).length,
         todayTasksCount: tasks.length
       };
     } catch (error) {
@@ -355,8 +355,8 @@ export class DatabaseService {
       // Filter out contents with unmet publish_after dependencies
       const suggestions = [];
       for (const content of data || []) {
-        if (content.publish_after) {
-          const dependency = await this.getContentByTopic(content.publish_after);
+        if ((content as any).publish_after) {
+          const dependency = await this.getContentByTopic((content as any).publish_after);
           if (!dependency || dependency.current_stage !== 11) {
             continue; // Skip if dependency not published
           }
@@ -386,8 +386,8 @@ export class DatabaseService {
       const morals: Array<{ moral: string; topic: string }> = [];
       
       for (const content of data || []) {
-        for (const moral of content.morals) {
-          morals.push({ moral, topic: content.topic });
+        for (const moral of (content as any).morals) {
+          morals.push({ moral, topic: (content as any).topic });
         }
       }
 

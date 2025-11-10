@@ -49,6 +49,12 @@ export class SuggestionService {
     const remainingSteps = this.calculateRemainingSteps(content);
 
     return {
+      id: `suggestion_${content.id}`,
+      type: 'stage',
+      title: `Continue with ${content.topic}`,
+      description: `Content is at stage ${content.current_stage} with ${remainingSteps} steps remaining`,
+      priority: score > 80 ? 'high' : score > 50 ? 'medium' : 'low',
+      contentId: content.id,
       content,
       score,
       remainingSteps,

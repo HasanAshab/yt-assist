@@ -266,7 +266,7 @@ export class ContentService {
         .update({ 
           current_stage: newStage,
           updated_at: new Date().toISOString()
-        })
+        } as any)
         .eq('id', id)
         .select()
         .single();
@@ -349,26 +349,28 @@ export class ContentService {
           .from('contents')
           .select('topic')
           .eq('publish_after', topic)
-      ]);
+      ]) as [any, any];
 
       const dependsOn: string[] = [];
       if (dependsOnResult.data?.publish_after) {
         dependsOn.push(dependsOnResult.data.publish_after);
       }
 
-      const dependents = (dependentsResult.data || []).map(item => item.topic);
+      const dependents = (dependentsResult.data || []).map((item: any) => item.topic);
 
       return {
+        id: `dep_${topic}`,
         contentTopic: topic,
         dependsOn,
-        dependents
+        dependent: dependents.join(',')
       };
     } catch (error) {
       handleSupabaseError(error);
       return {
+        id: `dep_${topic}`,
         contentTopic: topic,
         dependsOn: [],
-        dependents: []
+        dependent: ''
       };
     }
   }
@@ -550,6 +552,7 @@ export class ContentService {
   private static createDefaultFinalChecks(): FinalCheck[] {
     return DEFAULT_FINAL_CHECKS.map((description, index) => ({
       id: `check_${index}_${Date.now()}`,
+      text: description,
       description,
       completed: false
     }));
@@ -789,7 +792,7 @@ export class ContentService {
         .update({ 
           flags,
           updated_at: new Date().toISOString()
-        })
+        } as any)
         .eq('id', id)
         .select()
         .single();

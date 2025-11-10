@@ -118,7 +118,8 @@ export interface Database {
 // Supporting types
 export interface FinalCheck {
   id: string;
-  description: string;
+  text?: string;
+  description?: string;
   completed: boolean;
 }
 

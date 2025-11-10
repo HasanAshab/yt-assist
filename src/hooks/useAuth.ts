@@ -53,7 +53,7 @@ export const useAuth = () => {
     const sessionDuration = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
     const now = Date.now();
     
-    return (now - lastAuthTime) < sessionDuration;
+    return (now - Number(lastAuthTime)) < sessionDuration;
   }, [state.user]);
 
   return {

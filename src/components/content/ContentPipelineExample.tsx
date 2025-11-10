@@ -16,11 +16,11 @@ export const ContentPipelineExample: React.FC = () => {
     title: 'Complete Guide to Building Modern React Applications',
     script: undefined,
     final_checks: [
-      { id: '1', description: 'Content reviewed for accuracy', completed: true },
-      { id: '2', description: 'SEO optimization completed', completed: false },
-      { id: '3', description: 'Thumbnail approved', completed: false },
-      { id: '4', description: 'Description finalized', completed: false },
-      { id: '5', description: 'Tags and categories set', completed: false }
+      { id: '1', text: 'Content reviewed for accuracy', completed: true },
+      { id: '2', text: 'SEO optimization completed', completed: false },
+      { id: '3', text: 'Thumbnail approved', completed: false },
+      { id: '4', text: 'Description finalized', completed: false },
+      { id: '5', text: 'Tags and categories set', completed: false }
     ],
     publish_after: undefined,
     publish_before: undefined,
@@ -136,7 +136,7 @@ export const ContentPipelineExample: React.FC = () => {
                   }}
                   className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                 />
-                <label className="ml-2 text-sm text-gray-900">{check.description}</label>
+                <label className="ml-2 text-sm text-gray-900">{check.text}</label>
               </div>
             ))}
           </div>

@@ -101,7 +101,7 @@ export class ResilientService {
       const method = serviceClass[methodName];
       
       if (typeof method === 'function' && methodName !== 'constructor') {
-        resilientService[methodName] = async (...args: any[]) => {
+        (resilientService as any)[methodName] = async (...args: any[]) => {
           const context = `${defaultContext}-${methodName}`;
           
           return this.executeWithRetry(
@@ -111,7 +111,7 @@ export class ResilientService {
           );
         };
       } else {
-        resilientService[methodName] = method;
+        (resilientService as any)[methodName] = method;
       }
     });
 

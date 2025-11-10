@@ -8,8 +8,10 @@ import { LoadingSpinner } from '../common/LoadingSpinner';
 
 interface ContentFormProps {
   content?: Content;
-  isOpen: boolean;
-  onClose: () => void;
+  initialData?: Content;
+  isOpen?: boolean;
+  onClose?: () => void;
+  onCancel?: () => void;
   onSubmit?: (content: Content) => void;
 }
 
@@ -27,10 +29,14 @@ interface FormErrors {
 
 export const ContentForm: React.FC<ContentFormProps> = ({
   content,
-  isOpen,
+  initialData,
+  isOpen = true,
   onClose,
+  onCancel,
   onSubmit
 }) => {
+  // Use initialData if provided, otherwise use content
+  const editingContent = initialData || content;
   const { contents, addContent, updateContent } = useContent();
   const { handleError } = useErrorHandler();
   
@@ -53,18 +59,18 @@ export const ContentForm: React.FC<ContentFormProps> = ({
 
   // Initialize form data when content changes
   useEffect(() => {
-    if (content) {
+    if (editingContent) {
       setFormData({
-        topic: content.topic,
-        category: content.category,
-        title: content.title || '',
-        script: content.script || '',
-        publish_after: content.publish_after || '',
-        publish_before: content.publish_before || '',
-        link: content.link || '',
-        morals: [...content.morals]
+        topic: editingContent.topic,
+        category: editingContent.category,
+        title: editingContent.title || '',
+        script: editingContent.script || '',
+        publish_after: editingContent.publish_after || '',
+        publish_before: editingContent.publish_before || '',
+        link: editingContent.link || '',
+        morals: editingContent.morals ? [...editingContent.morals] : []
       });
-      setFinalChecks([...content.final_checks]);
+      setFinalChecks(editingContent.final_checks ? [...editingContent.final_checks] : []);
     } else {
       // Reset form for new content
       setFormData({
@@ -80,15 +86,15 @@ export const ContentForm: React.FC<ContentFormProps> = ({
       setFinalChecks([]);
     }
     setErrors({});
-  }, [content, isOpen]);
+  }, [editingContent, isOpen]);
 
   // Load available contents for dependencies
   useEffect(() => {
     if (isOpen) {
-      const filtered = contents.filter(c => c.topic !== content?.topic);
+      const filtered = contents.filter(c => c.topic !== editingContent?.topic);
       setAvailableContents(filtered);
     }
-  }, [isOpen, contents, content?.topic]);
+  }, [isOpen, contents, editingContent?.topic]);
 
   // Real-time validation
   const validateField = useCallback((field: keyof ContentFormData, value: any): string | undefined => {
@@ -101,7 +107,7 @@ export const ContentForm: React.FC<ContentFormProps> = ({
           return `Topic must be no more than ${VALIDATION_RULES.MAX_TOPIC_LENGTH} characters long`;
         }
         // Check uniqueness for new content or changed topic
-        if ((!content || content.topic !== value) && contents.some(c => c.topic === value)) {
+        if ((!editingContent || editingContent.topic !== value) && contents.some(c => c.topic === value)) {
           return 'A content with this topic already exists';
         }
         break;
@@ -140,7 +146,7 @@ export const ContentForm: React.FC<ContentFormProps> = ({
         break;
     }
     return undefined;
-  }, [formData, content, contents]);
+  }, [formData, editingContent, contents]);
 
   // Handle input changes with validation
   const handleInputChange = useCallback((field: keyof ContentFormData, value: any) => {
@@ -210,9 +216,9 @@ export const ContentForm: React.FC<ContentFormProps> = ({
     try {
       let result: Content;
       
-      if (content) {
+      if (editingContent) {
         // Update existing content
-        result = await ContentService.updateContent(content.id, formData);
+        result = await ContentService.updateContent(editingContent.id, formData);
         updateContent(result);
       } else {
         // Create new content
@@ -221,7 +227,7 @@ export const ContentForm: React.FC<ContentFormProps> = ({
       }
 
       // Update final checks if they changed
-      if (finalChecks.length > 0 && content) {
+      if (finalChecks.length > 0 && editingContent) {
         // Note: Final checks update would be handled by a separate service method
         // For now, we'll include them in the content update
       }
@@ -235,14 +241,15 @@ export const ContentForm: React.FC<ContentFormProps> = ({
     } finally {
       setIsSubmitting(false);
     }
-  }, [formData, finalChecks, content, validateForm, addContent, updateContent, onSubmit, onClose, handleError]);
+  }, [formData, finalChecks, editingContent, validateForm, addContent, updateContent, onSubmit, onClose, handleError]);
 
   // Handle modal close
   const handleClose = useCallback(() => {
     if (!isSubmitting) {
-      onClose();
+      onClose?.();
+      onCancel?.();
     }
-  }, [isSubmitting, onClose]);
+  }, [isSubmitting, onClose, onCancel]);
 
   if (!isOpen) return null;
 
@@ -252,7 +259,7 @@ export const ContentForm: React.FC<ContentFormProps> = ({
         <div className="sticky top-0 bg-white border-b px-6 py-4">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold text-gray-900">
-              {content ? 'Edit Content' : 'Create New Content'}
+              {editingContent ? 'Edit Content' : 'Create New Content'}
             </h2>
             <button
               onClick={handleClose}
@@ -446,7 +453,7 @@ export const ContentForm: React.FC<ContentFormProps> = ({
           />
 
           {/* Final Checks Management */}
-          {content && (
+          {editingContent && (
             <FinalChecksManager
               finalChecks={finalChecks}
               onChange={handleFinalChecksChange}
@@ -470,7 +477,7 @@ export const ContentForm: React.FC<ContentFormProps> = ({
               className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 flex items-center"
             >
               {isSubmitting && <LoadingSpinner size="sm" className="mr-2" />}
-              {content ? 'Update Content' : 'Create Content'}
+              {editingContent ? 'Update Content' : 'Create Content'}
             </button>
           </div>
         </form>
@@ -589,6 +596,7 @@ const FinalChecksManager: React.FC<FinalChecksManagerProps> = ({ finalChecks, on
     if (trimmed) {
       const newCheck: FinalCheck = {
         id: `check_${Date.now()}`,
+        text: trimmed,
         description: trimmed,
         completed: false
       };
@@ -627,7 +635,7 @@ const FinalChecksManager: React.FC<FinalChecksManagerProps> = ({ finalChecks, on
                 className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
               />
               <span className={`flex-1 text-sm ${check.completed ? 'text-gray-500 line-through' : 'text-gray-700'}`}>
-                {check.description}
+                {check.text || check.description}
               </span>
               <button
                 type="button"

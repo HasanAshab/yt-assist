@@ -93,8 +93,7 @@ export const useRetry = (config: RetryConfig = {}) => {
           
           return handleAsyncError(
             () => Promise.reject(err),
-            `${operationName || 'Operation'} failed: ${err.message}`,
-            'retry-mechanism'
+            `${operationName || 'Operation'} failed: ${err.message}`
           );
         }
 
@@ -107,8 +106,7 @@ export const useRetry = (config: RetryConfig = {}) => {
           
           return handleAsyncError(
             () => Promise.reject(err),
-            `${operationName || 'Operation'} failed after ${attempt} attempts: ${err.message}`,
-            'retry-mechanism'
+            `${operationName || 'Operation'} failed after ${attempt} attempts: ${err.message}`
           );
         }
 
@@ -178,8 +176,7 @@ export const useRetry = (config: RetryConfig = {}) => {
           
           return handleAsyncError(
             () => Promise.reject(err),
-            `${operationName || 'Operation'} failed: ${err.message}`,
-            'retry-mechanism'
+            `${operationName || 'Operation'} failed: ${err.message}`
           );
         }
 

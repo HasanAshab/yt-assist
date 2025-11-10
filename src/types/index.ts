@@ -11,7 +11,9 @@ export interface Content {
   created_at: string;
   updated_at: string;
   publish_after?: string;
+  publish_before?: string;
   morals?: string[];
+  flags?: ContentFlag[];
 }
 
 export interface ContentFilters {
@@ -47,6 +49,8 @@ export interface User {
   email: string;
   name?: string;
   preferences?: UserPreferences;
+  isAuthenticated: boolean;
+  lastAuthTime: string;
 }
 
 export interface UserPreferences {
@@ -85,11 +89,16 @@ export interface ContentFormData {
   category: 'Demanding' | 'Innovative';
   title?: string;
   script?: string;
+  link?: string;
+  morals?: string[];
+  publish_after?: string;
+  publish_before?: string;
 }
 
 export interface FinalCheck {
   id: string;
   text: string;
+  description?: string; // For compatibility with database
   completed: boolean;
 }
 
@@ -112,4 +121,60 @@ export interface AppState {
   tasks: TaskState;
   user?: User;
   settings: Settings;
+}
+
+// Additional types
+export type ContentFlag = 
+  | 'fans_feedback_analysed'
+  | 'overall_feedback_analysed';
+
+export interface ContentSuggestion {
+  id: string;
+  type: 'dependency' | 'moral' | 'stage';
+  title: string;
+  description: string;
+  priority: 'high' | 'medium' | 'low';
+  contentId?: string;
+  content?: Content; // For backward compatibility
+  score?: number;
+  blockedBy?: string[];
+  remainingSteps?: number;
+}
+
+export interface ValidationResult {
+  isValid: boolean;
+  errors: string[];
+}
+
+export interface SortOptions {
+  field: string;
+  direction: 'asc' | 'desc';
+}
+
+export interface ContentDependency {
+  id: string;
+  contentTopic: string;
+  dependsOn: string[];
+  dependent: string;
+}
+
+// Action types for reducers
+export interface ContentAction {
+  type: 'SET_CONTENTS' | 'ADD_CONTENT' | 'UPDATE_CONTENT' | 'DELETE_CONTENT' | 'SET_LOADING' | 'SET_ERROR' | 'SET_FILTERS';
+  payload?: any;
+}
+
+export interface TaskAction {
+  type: 'SET_TASKS' | 'ADD_TASK' | 'UPDATE_TASK' | 'DELETE_TASK' | 'SET_LOADING' | 'SET_ERROR';
+  payload?: any;
+}
+
+export interface UserAction {
+  type: 'SET_AUTHENTICATED' | 'SET_LAST_AUTH_TIME' | 'LOGOUT' | 'SET_USER_PREFERENCES';
+  payload?: any;
+}
+
+export interface SettingsAction {
+  type: 'SET_SETTINGS' | 'UPDATE_SETTING' | 'SET_DEFAULT_FINAL_CHECKS' | 'UPDATE_SETTINGS';
+  payload?: any;
 }

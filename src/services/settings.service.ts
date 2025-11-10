@@ -28,7 +28,7 @@ export class SettingsService {
       }
 
       return {
-        defaultFinalChecks: data?.value?.defaultFinalChecks || DEFAULT_FINAL_CHECKS
+        defaultFinalChecks: (data as any)?.value?.defaultFinalChecks || DEFAULT_FINAL_CHECKS
       };
     } catch (error) {
       console.error('Error fetching settings:', error);
@@ -51,7 +51,7 @@ export class SettingsService {
           key: this.SETTINGS_KEY,
           value: settings,
           updated_at: new Date().toISOString()
-        }, {
+        } as any, {
           onConflict: 'key'
         });
 
