@@ -67,53 +67,55 @@ export const ContentCard: React.FC<ContentCardProps> = ({
   if (layout === 'list') {
     return (
       <div
-        className={`bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer ${className}`}
+        className={`card-container bg-white border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-md transition-shadow cursor-pointer touch-target ${className}`}
         onClick={handleCardClick}
       >
-        <div className="flex items-center justify-between">
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-3 mb-2">
-              <h3 className="text-lg font-semibold text-gray-900 truncate">
+        <div className="flex flex-col sm:flex-row sm:items-start gap-4 w-full">
+          <div className="flex-1 min-w-0 flex-safe">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-3 w-full">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 leading-tight text-safe flex-1 min-w-0">
                 {content.topic}
               </h3>
               <span
-                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getCategoryColor(content.category)}`}
+                className={`self-start sm:self-center flex-shrink-0 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getCategoryColor(content.category)}`}
               >
                 {content.category}
               </span>
             </div>
             
             {content.title && (
-              <p className="text-sm text-gray-600 mb-2 truncate">
+              <p className="text-base sm:text-sm text-gray-600 mb-3 line-clamp-2 text-safe">
                 {content.title}
               </p>
             )}
             
-            <div className="flex items-center gap-4">
-              <StageIndicator 
-                currentStage={content.current_stage}
-                size="sm"
-              />
-              
-              <span className={`text-sm font-medium ${getStageColor(content.current_stage)}`}>
-                {currentStage}
-              </span>
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <StageIndicator 
+                  currentStage={content.current_stage}
+                  size="sm"
+                />
+                <span className={`text-sm font-medium whitespace-nowrap ${getStageColor(content.current_stage)}`}>
+                  {currentStage}
+                </span>
+              </div>
               
               {hasIncompleteFinalChecks && (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                <span className="inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 flex-shrink-0">
                   Checks pending
                 </span>
               )}
               
               {content.publish_after && (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                  Depends on: {content.publish_after}
+                <span className="inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 flex-shrink-0">
+                  <span className="hidden sm:inline">Depends on: </span>
+                  <span className="text-safe truncate max-w-24 sm:max-w-none">{content.publish_after}</span>
                 </span>
               )}
             </div>
           </div>
           
-          <div className="ml-4">
+          <div className="actions-container">
             <ContentActions
               content={content}
               onEdit={onEdit}
@@ -125,14 +127,14 @@ export const ContentCard: React.FC<ContentCardProps> = ({
         </div>
         
         {/* Progress bar */}
-        <div className="mt-3">
-          <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
+        <div className="mt-4 w-full">
+          <div className="flex items-center justify-between text-sm text-gray-500 mb-2">
             <span>Progress</span>
-            <span>{Math.round(progressPercentage)}%</span>
+            <span className="font-medium">{Math.round(progressPercentage)}%</span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="w-full bg-gray-200 rounded-full h-3">
             <div
-              className={`h-2 rounded-full transition-all duration-300 ${
+              className={`h-3 rounded-full transition-all duration-300 ${
                 isPublished ? 'bg-green-500' : 'bg-blue-500'
               }`}
               style={{ width: `${progressPercentage}%` }}
@@ -146,23 +148,23 @@ export const ContentCard: React.FC<ContentCardProps> = ({
   // Grid layout
   return (
     <div
-      className={`bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer ${className}`}
+      className={`card-container bg-white border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-lg transition-shadow cursor-pointer touch-target ${className}`}
       onClick={handleCardClick}
     >
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex-1 min-w-0">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+      <div className="flex items-start justify-between mb-4 w-full">
+        <div className="flex-1 min-w-0 pr-2 flex-safe">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 line-clamp-2 leading-tight text-safe">
             {content.topic}
           </h3>
           
           <span
-            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getCategoryColor(content.category)}`}
+            className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border flex-shrink-0 ${getCategoryColor(content.category)}`}
           >
             {content.category}
           </span>
         </div>
         
-        <div className="ml-2">
+        <div className="actions-container">
           <ContentActions
             content={content}
             onEdit={onEdit}
@@ -174,14 +176,14 @@ export const ContentCard: React.FC<ContentCardProps> = ({
       </div>
       
       {content.title && (
-        <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+        <p className="text-sm text-gray-600 mb-4 line-clamp-2 leading-relaxed text-safe">
           {content.title}
         </p>
       )}
       
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <span className={`text-sm font-medium ${getStageColor(content.current_stage)}`}>
+      <div className="space-y-4 w-full">
+        <div className="flex items-center justify-between w-full">
+          <span className={`text-sm font-medium flex-shrink-0 ${getStageColor(content.current_stage)}`}>
             {currentStage}
           </span>
           <StageIndicator 
@@ -191,14 +193,14 @@ export const ContentCard: React.FC<ContentCardProps> = ({
         </div>
         
         {/* Progress bar */}
-        <div>
-          <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
+        <div className="w-full">
+          <div className="flex items-center justify-between text-sm text-gray-500 mb-2">
             <span>Progress</span>
-            <span>{Math.round(progressPercentage)}%</span>
+            <span className="font-medium">{Math.round(progressPercentage)}%</span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="w-full bg-gray-200 rounded-full h-3">
             <div
-              className={`h-2 rounded-full transition-all duration-300 ${
+              className={`h-3 rounded-full transition-all duration-300 ${
                 isPublished ? 'bg-green-500' : 'bg-blue-500'
               }`}
               style={{ width: `${progressPercentage}%` }}
@@ -207,18 +209,18 @@ export const ContentCard: React.FC<ContentCardProps> = ({
         </div>
         
         {/* Additional info */}
-        <div className="space-y-2">
+        <div className="space-y-2 w-full">
           {hasIncompleteFinalChecks && (
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-              <span className="text-xs text-gray-600">Final checks pending</span>
+              <div className="w-2 h-2 bg-yellow-400 rounded-full flex-shrink-0"></div>
+              <span className="text-sm text-gray-600 flex-1 min-w-0">Final checks pending</span>
             </div>
           )}
           
           {content.publish_after && (
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
-              <span className="text-xs text-gray-600">
+              <div className="w-2 h-2 bg-gray-400 rounded-full flex-shrink-0"></div>
+              <span className="text-sm text-gray-600 flex-1 min-w-0 text-safe">
                 Depends on: {content.publish_after}
               </span>
             </div>
@@ -226,15 +228,15 @@ export const ContentCard: React.FC<ContentCardProps> = ({
           
           {content.morals && content.morals.length > 0 && (
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-              <span className="text-xs text-gray-600">
+              <div className="w-2 h-2 bg-purple-400 rounded-full flex-shrink-0"></div>
+              <span className="text-sm text-gray-600 flex-1 min-w-0">
                 {content.morals.length} moral{content.morals.length !== 1 ? 's' : ''}
               </span>
             </div>
           )}
         </div>
         
-        <div className="text-xs text-gray-400 pt-2 border-t border-gray-100">
+        <div className="text-sm text-gray-400 pt-3 border-t border-gray-100 w-full">
           Updated {new Date(content.updated_at).toLocaleDateString()}
         </div>
       </div>

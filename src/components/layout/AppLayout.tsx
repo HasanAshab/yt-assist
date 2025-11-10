@@ -8,19 +8,21 @@ interface AppLayoutProps {
 
 export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-gray-50 md:flex overflow-x-hidden">
       {/* Navigation */}
       <Navigation />
       
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col md:ml-0">
+      <div className="flex-1 flex flex-col min-w-0 overflow-x-hidden">
         {/* Main Content */}
-        <main className="flex-1 p-4 md:p-6 pb-20 md:pb-6">
+        <main className="flex-1 p-4 sm:p-6 pb-24 sm:pb-6 md:pb-6 overflow-x-hidden">
           {/* Breadcrumb Navigation */}
-          <Breadcrumb />
+          <div className="mb-4 sm:mb-6">
+            <Breadcrumb />
+          </div>
           
           {/* Page Content */}
-          <div className="max-w-7xl mx-auto">
+          <div className="w-full max-w-7xl mx-auto overflow-x-hidden">
             {children}
           </div>
         </main>

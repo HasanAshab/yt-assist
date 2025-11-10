@@ -173,30 +173,30 @@ export const Navigation: React.FC = () => {
         </div>
       </div>
 
-      {/* Bottom Navigation for Mobile (Alternative) */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-2 py-1 z-40">
+      {/* Bottom Navigation for Mobile */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-2 py-2 z-40 safe-area-pb">
         <div className="flex justify-around">
           {navigationItems.slice(0, 5).map((item) => (
             <Link
               key={item.path}
               to={item.path}
               className={`
-                flex flex-col items-center gap-1 px-2 py-2 rounded-lg text-xs font-medium transition-colors relative
+                flex flex-col items-center gap-1 px-3 py-2 rounded-lg text-xs font-medium transition-colors relative min-w-0 touch-target
                 ${isActiveRoute(item.path)
-                  ? 'text-blue-700'
-                  : 'text-gray-600'
+                  ? 'text-blue-700 bg-blue-50'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                 }
               `}
             >
-              <span className="relative">
+              <span className="relative text-xl">
                 {item.icon}
                 {item.badge !== undefined && item.badge > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center text-[10px]">
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full min-w-[18px] h-[18px] flex items-center justify-center text-[10px] font-bold">
                     {item.badge > 9 ? '9+' : item.badge}
                   </span>
                 )}
               </span>
-              <span className="truncate max-w-[60px]">{item.label}</span>
+              <span className="truncate max-w-[60px] text-[11px] leading-tight">{item.label}</span>
             </Link>
           ))}
         </div>

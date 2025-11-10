@@ -66,23 +66,23 @@ export function ContentPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-20 sm:pb-0 w-full overflow-x-hidden">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Content Pipeline</h1>
-          <p className="text-gray-600">Manage your YouTube content from idea to publication</p>
+      <div className="flex flex-col gap-4 w-full">
+        <div className="w-full">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 text-safe">Content Pipeline</h1>
+          <p className="text-base sm:text-gray-600 text-gray-500 mt-1 text-safe">Manage your YouTube content from idea to publication</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col sm:flex-row gap-3 w-full">
           <Link
             to="/content/manage"
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            className="flex-1 sm:flex-none px-4 py-3 text-base sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-center touch-target"
           >
             Advanced Management
           </Link>
           <button
             onClick={() => setShowCreateForm(true)}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="flex-1 sm:flex-none px-4 py-3 text-base sm:text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors touch-target"
           >
             Create Content
           </button>

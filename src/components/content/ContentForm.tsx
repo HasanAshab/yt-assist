@@ -267,17 +267,17 @@ export const ContentForm: React.FC<ContentFormProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-white border-b px-6 py-4">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end sm:items-center justify-center p-0 sm:p-4 z-50">
+      <div className="bg-white rounded-t-xl sm:rounded-lg shadow-xl w-full max-w-2xl h-[95vh] sm:max-h-[90vh] overflow-y-auto">
+        <div className="sticky top-0 bg-white border-b px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-gray-900">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
               {editingContent ? 'Edit Content' : 'Create New Content'}
             </h2>
             <button
               onClick={handleClose}
               disabled={isSubmitting}
-              className="text-gray-400 hover:text-gray-600 disabled:opacity-50"
+              className="p-2 text-gray-400 hover:text-gray-600 disabled:opacity-50 touch-target"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -286,16 +286,16 @@ export const ContentForm: React.FC<ContentFormProps> = ({
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-6 pb-24 sm:pb-6">
           {errors.general && (
-            <div className="bg-red-50 border border-red-200 rounded-md p-4">
-              <p className="text-sm text-red-600">{errors.general}</p>
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <p className="text-base sm:text-sm text-red-600">{errors.general}</p>
             </div>
           )}
 
           {/* Topic Field */}
           <div>
-            <label htmlFor="topic" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="topic" className="block text-base sm:text-sm font-medium text-gray-700 mb-3">
               Topic *
             </label>
             <input
@@ -303,20 +303,20 @@ export const ContentForm: React.FC<ContentFormProps> = ({
               id="topic"
               value={formData.topic}
               onChange={(e) => handleInputChange('topic', e.target.value)}
-              className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+              className={`w-full px-4 py-3 text-base border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 touch-target ${
                 errors.topic ? 'border-red-300' : 'border-gray-300'
               }`}
               placeholder="Enter content topic"
               disabled={isSubmitting}
             />
             {errors.topic && (
-              <p className="mt-1 text-sm text-red-600">{errors.topic}</p>
+              <p className="mt-2 text-base sm:text-sm text-red-600">{errors.topic}</p>
             )}
           </div>
 
           {/* Category Field */}
           <div>
-            <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="category" className="block text-base sm:text-sm font-medium text-gray-700 mb-3">
               Category *
             </label>
             <input
@@ -325,7 +325,7 @@ export const ContentForm: React.FC<ContentFormProps> = ({
               list="category-suggestions"
               value={formData.category}
               onChange={(e) => handleInputChange('category', e.target.value)}
-              className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+              className={`w-full px-4 py-3 text-base border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 touch-target ${
                 errors.category ? 'border-red-300' : 'border-gray-300'
               }`}
               placeholder="Enter or select a category"
@@ -336,17 +336,17 @@ export const ContentForm: React.FC<ContentFormProps> = ({
                 <option key={category} value={category} />
               ))}
             </datalist>
-            <p className="mt-1 text-xs text-gray-500">
+            <p className="mt-2 text-sm text-gray-500">
               You can enter any category or choose from suggestions
             </p>
             {errors.category && (
-              <p className="mt-1 text-sm text-red-600">{errors.category}</p>
+              <p className="mt-2 text-base sm:text-sm text-red-600">{errors.category}</p>
             )}
           </div>
 
           {/* Title Field */}
           <div>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="title" className="block text-base sm:text-sm font-medium text-gray-700 mb-3">
               Title
             </label>
             <input
@@ -354,50 +354,50 @@ export const ContentForm: React.FC<ContentFormProps> = ({
               id="title"
               value={formData.title}
               onChange={(e) => handleInputChange('title', e.target.value)}
-              className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+              className={`w-full px-4 py-3 text-base border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 touch-target ${
                 errors.title ? 'border-red-300' : 'border-gray-300'
               }`}
               placeholder="Enter content title"
               disabled={isSubmitting}
             />
             {errors.title && (
-              <p className="mt-1 text-sm text-red-600">{errors.title}</p>
+              <p className="mt-2 text-base sm:text-sm text-red-600">{errors.title}</p>
             )}
           </div>
 
           {/* Script Field */}
           <div>
-            <label htmlFor="script" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="script" className="block text-base sm:text-sm font-medium text-gray-700 mb-3">
               Script
             </label>
             <textarea
               id="script"
               value={formData.script}
               onChange={(e) => handleInputChange('script', e.target.value)}
-              rows={4}
-              className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+              rows={6}
+              className={`w-full px-4 py-3 text-base border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 touch-target resize-y ${
                 errors.script ? 'border-red-300' : 'border-gray-300'
               }`}
               placeholder="Enter content script"
               disabled={isSubmitting}
             />
             {errors.script && (
-              <p className="mt-1 text-sm text-red-600">{errors.script}</p>
+              <p className="mt-2 text-base sm:text-sm text-red-600">{errors.script}</p>
             )}
           </div>
 
           {/* Dependencies */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-6">
             {/* Publish After */}
             <div>
-              <label htmlFor="publish_after" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="publish_after" className="block text-base sm:text-sm font-medium text-gray-700 mb-3">
                 Publish After
               </label>
               <select
                 id="publish_after"
                 value={formData.publish_after}
                 onChange={(e) => handleInputChange('publish_after', e.target.value)}
-                className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                className={`w-full px-4 py-3 text-base border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 touch-target ${
                   errors.publish_after ? 'border-red-300' : 'border-gray-300'
                 }`}
                 disabled={isSubmitting}
@@ -410,20 +410,20 @@ export const ContentForm: React.FC<ContentFormProps> = ({
                 ))}
               </select>
               {errors.publish_after && (
-                <p className="mt-1 text-sm text-red-600">{errors.publish_after}</p>
+                <p className="mt-2 text-base sm:text-sm text-red-600">{errors.publish_after}</p>
               )}
             </div>
 
             {/* Publish Before */}
             <div>
-              <label htmlFor="publish_before" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="publish_before" className="block text-base sm:text-sm font-medium text-gray-700 mb-3">
                 Publish Before
               </label>
               <select
                 id="publish_before"
                 value={formData.publish_before}
                 onChange={(e) => handleInputChange('publish_before', e.target.value)}
-                className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                className={`w-full px-4 py-3 text-base border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 touch-target ${
                   errors.publish_before ? 'border-red-300' : 'border-gray-300'
                 }`}
                 disabled={isSubmitting}
@@ -436,14 +436,14 @@ export const ContentForm: React.FC<ContentFormProps> = ({
                 ))}
               </select>
               {errors.publish_before && (
-                <p className="mt-1 text-sm text-red-600">{errors.publish_before}</p>
+                <p className="mt-2 text-base sm:text-sm text-red-600">{errors.publish_before}</p>
               )}
             </div>
           </div>
 
           {/* Link Field */}
           <div>
-            <label htmlFor="link" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="link" className="block text-base sm:text-sm font-medium text-gray-700 mb-3">
               Link
             </label>
             <input
@@ -451,14 +451,14 @@ export const ContentForm: React.FC<ContentFormProps> = ({
               id="link"
               value={formData.link}
               onChange={(e) => handleInputChange('link', e.target.value)}
-              className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+              className={`w-full px-4 py-3 text-base border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 touch-target ${
                 errors.link ? 'border-red-300' : 'border-gray-300'
               }`}
               placeholder="https://example.com"
               disabled={isSubmitting}
             />
             {errors.link && (
-              <p className="mt-1 text-sm text-red-600">{errors.link}</p>
+              <p className="mt-2 text-base sm:text-sm text-red-600">{errors.link}</p>
             )}
           </div>
 
@@ -480,23 +480,25 @@ export const ContentForm: React.FC<ContentFormProps> = ({
           )}
 
           {/* Form Actions */}
-          <div className="flex justify-end space-x-3 pt-6 border-t">
-            <button
-              type="button"
-              onClick={handleClose}
-              disabled={isSubmitting}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 flex items-center"
-            >
-              {isSubmitting && <LoadingSpinner size="sm" className="mr-2" />}
-              {editingContent ? 'Update Content' : 'Create Content'}
-            </button>
+          <div className="sticky bottom-0 bg-white border-t pt-4 -mx-4 sm:-mx-6 px-4 sm:px-6 pb-4 sm:pb-0 sm:static sm:border-t-0 sm:pt-6">
+            <div className="flex flex-col sm:flex-row gap-3 sm:justify-end">
+              <button
+                type="button"
+                onClick={handleClose}
+                disabled={isSubmitting}
+                className="w-full sm:w-auto px-6 py-3 text-base sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 touch-target"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full sm:w-auto px-6 py-3 text-base sm:text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 flex items-center justify-center touch-target"
+              >
+                {isSubmitting && <LoadingSpinner size="sm" className="mr-2" />}
+                {editingContent ? 'Update Content' : 'Create Content'}
+              </button>
+            </div>
           </div>
         </form>
       </div>
@@ -536,23 +538,23 @@ const MoralsInput: React.FC<MoralsInputProps> = ({ morals, onChange, error, disa
 
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+      <label className="block text-base sm:text-sm font-medium text-gray-700 mb-3">
         Morals
       </label>
       
       {/* Existing morals */}
       {morals.length > 0 && (
-        <div className="mb-3 space-y-2">
+        <div className="mb-4 space-y-3">
           {morals.map((moral, index) => (
-            <div key={index} className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-md">
-              <span className="text-sm text-gray-700">{moral}</span>
+            <div key={index} className="flex items-start gap-3 bg-gray-50 px-4 py-3 rounded-lg">
+              <span className="flex-1 text-base sm:text-sm text-gray-700 leading-relaxed">{moral}</span>
               <button
                 type="button"
                 onClick={() => removeMoral(index)}
                 disabled={disabled}
-                className="text-red-500 hover:text-red-700 disabled:opacity-50"
+                className="flex-shrink-0 p-1 text-red-500 hover:text-red-700 disabled:opacity-50 touch-target"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
@@ -562,13 +564,13 @@ const MoralsInput: React.FC<MoralsInputProps> = ({ morals, onChange, error, disa
       )}
 
       {/* Add new moral */}
-      <div className="flex space-x-2">
+      <div className="flex flex-col sm:flex-row gap-3">
         <input
           type="text"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyPress={handleKeyPress}
-          className={`flex-1 px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+          className={`flex-1 px-4 py-3 text-base border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 touch-target ${
             error ? 'border-red-300' : 'border-gray-300'
           }`}
           placeholder="Enter a moral"
@@ -578,14 +580,14 @@ const MoralsInput: React.FC<MoralsInputProps> = ({ morals, onChange, error, disa
           type="button"
           onClick={addMoral}
           disabled={disabled || !inputValue.trim()}
-          className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+          className="w-full sm:w-auto px-6 py-3 text-base sm:text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 touch-target"
         >
           Add
         </button>
       </div>
       
       {error && (
-        <p className="mt-1 text-sm text-red-600">{error}</p>
+        <p className="mt-2 text-base sm:text-sm text-red-600">{error}</p>
       )}
     </div>
   );
@@ -636,32 +638,32 @@ const FinalChecksManager: React.FC<FinalChecksManagerProps> = ({ finalChecks, on
 
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+      <label className="block text-base sm:text-sm font-medium text-gray-700 mb-3">
         Final Checks
       </label>
       
       {/* Existing checks */}
       {finalChecks.length > 0 && (
-        <div className="mb-3 space-y-2">
+        <div className="mb-4 space-y-3">
           {finalChecks.map((check) => (
-            <div key={check.id} className="flex items-center space-x-3 bg-gray-50 px-3 py-2 rounded-md">
+            <div key={check.id} className="flex items-start gap-4 bg-gray-50 px-4 py-3 rounded-lg touch-target">
               <input
                 type="checkbox"
                 checked={check.completed}
                 onChange={() => toggleCheck(check.id)}
                 disabled={disabled}
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                className="mt-1 h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
               />
-              <span className={`flex-1 text-sm ${check.completed ? 'text-gray-500 line-through' : 'text-gray-700'}`}>
+              <span className={`flex-1 text-base sm:text-sm leading-relaxed ${check.completed ? 'text-gray-500 line-through' : 'text-gray-700'}`}>
                 {check.text || check.description}
               </span>
               <button
                 type="button"
                 onClick={() => removeCheck(check.id)}
                 disabled={disabled}
-                className="text-red-500 hover:text-red-700 disabled:opacity-50"
+                className="flex-shrink-0 p-1 text-red-500 hover:text-red-700 disabled:opacity-50 touch-target"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
@@ -671,13 +673,13 @@ const FinalChecksManager: React.FC<FinalChecksManagerProps> = ({ finalChecks, on
       )}
 
       {/* Add new check */}
-      <div className="flex space-x-2">
+      <div className="flex flex-col sm:flex-row gap-3">
         <input
           type="text"
           value={newCheckDescription}
           onChange={(e) => setNewCheckDescription(e.target.value)}
           onKeyPress={handleKeyPress}
-          className="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-1 px-4 py-3 text-base border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 touch-target"
           placeholder="Enter final check description"
           disabled={disabled}
         />
@@ -685,7 +687,7 @@ const FinalChecksManager: React.FC<FinalChecksManagerProps> = ({ finalChecks, on
           type="button"
           onClick={addCheck}
           disabled={disabled || !newCheckDescription.trim()}
-          className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+          className="w-full sm:w-auto px-6 py-3 text-base sm:text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 touch-target"
         >
           Add
         </button>

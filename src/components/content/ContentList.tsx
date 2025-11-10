@@ -81,43 +81,45 @@ export const ContentList: React.FC<ContentListProps> = ({
   }
 
   return (
-    <div className={`space-y-6 ${className}`}>
+    <div className={`space-y-6 w-full overflow-x-hidden ${className}`}>
       {/* Header with search and layout toggle */}
-      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-        <div className="flex-1 w-full sm:w-auto">
-          {showSearch && (
-            <SearchInput
-              placeholder="Search by topic or title..."
-              value={filters.search || ''}
-              onChange={handleSearch}
-              className="w-full sm:max-w-md"
-            />
-          )}
-        </div>
-        
-        <div className="flex items-center gap-2">
-          {/* Layout toggle */}
-          <div className="flex bg-gray-100 rounded-lg p-1">
-            <button
-              onClick={() => setLocalLayout('grid')}
-              className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
-                localLayout === 'grid'
-                  ? 'bg-white text-gray-900 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              Grid
-            </button>
-            <button
-              onClick={() => setLocalLayout('list')}
-              className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
-                localLayout === 'list'
-                  ? 'bg-white text-gray-900 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              List
-            </button>
+      <div className="flex flex-col gap-4 w-full">
+        <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-between w-full">
+          <div className="flex-1 min-w-0">
+            {showSearch && (
+              <SearchInput
+                placeholder="Search by topic or title..."
+                value={filters.search || ''}
+                onChange={handleSearch}
+                className="w-full"
+              />
+            )}
+          </div>
+          
+          <div className="flex items-center justify-center sm:justify-end flex-shrink-0">
+            {/* Layout toggle */}
+            <div className="flex bg-gray-100 rounded-lg p-1 w-full sm:w-auto max-w-xs sm:max-w-none">
+              <button
+                onClick={() => setLocalLayout('grid')}
+                className={`flex-1 sm:flex-none px-4 py-2 sm:px-3 sm:py-1 rounded text-base sm:text-sm font-medium transition-colors touch-target ${
+                  localLayout === 'grid'
+                    ? 'bg-white text-gray-900 shadow-sm'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                Grid
+              </button>
+              <button
+                onClick={() => setLocalLayout('list')}
+                className={`flex-1 sm:flex-none px-4 py-2 sm:px-3 sm:py-1 rounded text-base sm:text-sm font-medium transition-colors touch-target ${
+                  localLayout === 'list'
+                    ? 'bg-white text-gray-900 shadow-sm'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                List
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -133,7 +135,7 @@ export const ContentList: React.FC<ContentListProps> = ({
       )}
 
       {/* Results summary */}
-      <div className="flex items-center justify-between text-sm text-gray-600">
+      <div className="flex flex-col sm:flex-row gap-2 sm:items-center sm:justify-between text-base sm:text-sm text-gray-600">
         <span>
           {displayContents.length} of {contents.length} content{contents.length !== 1 ? 's' : ''}
           {hasActiveFilters && ' (filtered)'}
@@ -142,7 +144,7 @@ export const ContentList: React.FC<ContentListProps> = ({
         {hasActiveFilters && (
           <button
             onClick={handleClearFilters}
-            className="text-blue-600 hover:text-blue-800 font-medium"
+            className="text-blue-600 hover:text-blue-800 font-medium text-left sm:text-right touch-target py-1"
           >
             Clear filters
           </button>
@@ -184,8 +186,8 @@ export const ContentList: React.FC<ContentListProps> = ({
         <div
           className={
             localLayout === 'grid'
-              ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
-              : 'space-y-4'
+              ? 'responsive-grid w-full'
+              : 'space-y-4 w-full'
           }
         >
           {displayContents.map((content) => (
