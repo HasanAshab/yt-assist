@@ -15,32 +15,7 @@ export const TaskList: React.FC<TaskListProps> = ({
   onTaskClick,
   className = ''
 }) => {
-  const formatTimeRemaining = (task: Task) => {
-    const timeInfo = TaskService.getTimeUntilExpiration(task);
-    
-    if (timeInfo.isExpired) {
-      return { text: 'Expired', className: 'text-red-600 bg-red-50' };
-    }
-    
-    if (timeInfo.hours === 0 && timeInfo.minutes < 60) {
-      return { 
-        text: `${timeInfo.minutes}m left`, 
-        className: 'text-orange-600 bg-orange-50' 
-      };
-    }
-    
-    if (timeInfo.hours < 2) {
-      return { 
-        text: `${timeInfo.hours}h ${timeInfo.minutes}m left`, 
-        className: 'text-yellow-600 bg-yellow-50' 
-      };
-    }
-    
-    return { 
-      text: `${timeInfo.hours}h left`, 
-      className: 'text-green-600 bg-green-50' 
-    };
-  };
+
 
   const formatCreatedAt = (dateString: string) => {
     const date = new Date(dateString);
@@ -88,7 +63,6 @@ export const TaskList: React.FC<TaskListProps> = ({
   return (
     <div className={`task-list space-y-3 ${className}`}>
       {tasks.map((task) => {
-        const timeRemaining = formatTimeRemaining(task);
         const isExpired = TaskService.isTaskExpired(task);
         
         return (
@@ -142,15 +116,7 @@ export const TaskList: React.FC<TaskListProps> = ({
               </div>
 
               {/* Right Side Actions */}
-              <div className="flex flex-col items-end gap-2">
-                {/* Time Remaining Badge */}
-                <span className={`
-                  px-2 py-1 rounded-full text-xs font-medium
-                  ${timeRemaining.className}
-                `}>
-                  {timeRemaining.text}
-                </span>
-
+              <div className="flex items-center">
                 {/* Complete Button */}
                 <button
                   onClick={(e) => {

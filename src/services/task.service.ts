@@ -221,6 +221,18 @@ export class TaskService {
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
 
+    // Debug logging to help identify the issue
+    console.log('Time calculation debug:', {
+      taskId: task.id,
+      taskTitle: task.title,
+      now: now.toISOString(),
+      expirationDate: expirationDate.toISOString(),
+      timeDiff,
+      totalMinutes,
+      hours,
+      minutes
+    });
+
     return {
       isExpired: false,
       hours,
