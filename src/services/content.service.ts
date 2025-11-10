@@ -420,8 +420,8 @@ export class ContentService {
     }
 
     // Category validation
-    if (!data.category || !['Demanding', 'Innovative'].includes(data.category)) {
-      errors.push('Category must be either "Demanding" or "Innovative"');
+    if (!data.category) {
+      errors.push('Category must be set');
     }
 
     // Morals validation

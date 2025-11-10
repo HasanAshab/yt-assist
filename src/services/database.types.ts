@@ -22,7 +22,7 @@ export interface Database {
         Insert: {
           id?: string;
           topic: string;
-          category: 'Demanding' | 'Innovative';
+          category: string;
           current_stage?: number;
           title?: string | null;
           script?: string | null;
@@ -38,7 +38,7 @@ export interface Database {
         Update: {
           id?: string;
           topic?: string;
-          category?: 'Demanding' | 'Innovative';
+          category?: string;
           current_stage?: number;
           title?: string | null;
           script?: string | null;

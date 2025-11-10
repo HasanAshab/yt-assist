@@ -14,8 +14,8 @@ export const CONTENT_STAGES = [
   'Published'     // 11
 ] as const;
 
-// Content categories
-export const CONTENT_CATEGORIES = ['Demanding', 'Innovative'] as const;
+// Content categories (suggestions - any string is allowed)
+export const CONTENT_CATEGORIES = ['Demanding', 'Innovative', 'Farmer', 'Educational', 'Entertainment', 'Tutorial', 'Review', 'News', 'Opinion'] as const;
 
 // Default final checks for new content
 export const DEFAULT_FINAL_CHECKS = [];

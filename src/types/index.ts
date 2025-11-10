@@ -3,7 +3,7 @@ export interface Content {
   id: string;
   topic: string;
   title?: string;
-  category: 'Demanding' | 'Innovative';
+  category: string; // Now allows any string instead of restricted values
   current_stage: number;
   script?: string;
   link?: string;
@@ -17,7 +17,7 @@ export interface Content {
 }
 
 export interface ContentFilters {
-  category?: 'Demanding' | 'Innovative';
+  category?: string; // Now allows any string for filtering
   stage?: number;
   search?: string;
 }
@@ -56,7 +56,7 @@ export interface User {
 export interface UserPreferences {
   theme?: 'light' | 'dark';
   notifications?: boolean;
-  defaultCategory?: 'Demanding' | 'Innovative';
+  defaultCategory?: string; // Now allows any string for default category
 }
 
 // Settings types
@@ -86,7 +86,7 @@ export interface ApiResponse<T> {
 // Form types
 export interface ContentFormData {
   topic: string;
-  category: 'Demanding' | 'Innovative';
+  category: string; // Now allows any string for category
   title?: string;
   script?: string;
   link?: string;

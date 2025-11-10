@@ -28,11 +28,11 @@ export const ContentDetailModal: React.FC<ContentDetailModalProps> = ({
   const [isUpdating, setIsUpdating] = useState(false);
   const [localContent, setLocalContent] = useState(content);
 
-  // Handle stage advancement
-  const handleStageAdvance = useCallback(async (newStage: number) => {
+  // Handle stage advancement for ContentPipeline
+  const handleStageUpdate = useCallback(async (contentId: string, newStage: number) => {
     setIsUpdating(true);
     try {
-      const updatedContent = await ContentService.updateContentStage(localContent.id, newStage);
+      const updatedContent = await ContentService.updateContentStage(contentId, newStage);
       setLocalContent(updatedContent);
       updateContent(updatedContent);
     } catch (error) {
@@ -40,7 +40,12 @@ export const ContentDetailModal: React.FC<ContentDetailModalProps> = ({
     } finally {
       setIsUpdating(false);
     }
-  }, [localContent.id, updateContent, handleError]);
+  }, [updateContent, handleError]);
+
+  // Handle stage advancement for StageManager
+  const handleStageAdvance = useCallback(async (newStage: number) => {
+    await handleStageUpdate(localContent.id, newStage);
+  }, [handleStageUpdate, localContent.id]);
 
   // Handle final check toggle
   const handleFinalCheckToggle = useCallback(async (checkId: string) => {
@@ -60,7 +65,7 @@ export const ContentDetailModal: React.FC<ContentDetailModalProps> = ({
         link: localContent.link,
         morals: localContent.morals
       });
-      
+
       // Update final checks separately (this would need to be implemented in ContentService)
       const contentWithUpdatedChecks = { ...updatedContent, final_checks: updatedFinalChecks };
       setLocalContent(contentWithUpdatedChecks);
@@ -100,16 +105,14 @@ export const ContentDetailModal: React.FC<ContentDetailModalProps> = ({
                 {localContent.topic}
               </h2>
               <div className="flex items-center gap-3 mt-1">
-                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                  localContent.category === 'Demanding' 
-                    ? 'bg-red-100 text-red-800' 
+                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${localContent.category === 'Demanding'
+                    ? 'bg-red-100 text-red-800'
                     : 'bg-blue-100 text-blue-800'
-                }`}>
+                  }`}>
                   {localContent.category}
                 </span>
-                <span className={`text-sm font-medium ${
-                  isPublished ? 'text-green-600' : 'text-blue-600'
-                }`}>
+                <span className={`text-sm font-medium ${isPublished ? 'text-green-600' : 'text-blue-600'
+                  }`}>
                   {currentStage}
                 </span>
               </div>
@@ -151,9 +154,8 @@ export const ContentDetailModal: React.FC<ContentDetailModalProps> = ({
             </div>
             <div className="w-full bg-gray-200 rounded-full h-3">
               <div
-                className={`h-3 rounded-full transition-all duration-300 ${
-                  isPublished ? 'bg-green-500' : 'bg-blue-500'
-                }`}
+                className={`h-3 rounded-full transition-all duration-300 ${isPublished ? 'bg-green-500' : 'bg-blue-500'
+                  }`}
                 style={{ width: `${progressPercentage}%` }}
               />
             </div>
@@ -162,10 +164,9 @@ export const ContentDetailModal: React.FC<ContentDetailModalProps> = ({
           {/* Content Pipeline Visualization */}
           <div>
             <h3 className="text-lg font-medium text-gray-900 mb-4">Pipeline Progress</h3>
-            <ContentPipeline 
+            <ContentPipeline
               content={localContent}
-              onStageClick={handleStageAdvance}
-              disabled={isUpdating}
+              onStageUpdate={handleStageUpdate}
             />
           </div>
 
@@ -184,7 +185,7 @@ export const ContentDetailModal: React.FC<ContentDetailModalProps> = ({
             {/* Basic Information */}
             <div className="space-y-4">
               <h3 className="text-lg font-medium text-gray-900">Content Details</h3>
-              
+
               {localContent.title && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
@@ -256,7 +257,7 @@ export const ContentDetailModal: React.FC<ContentDetailModalProps> = ({
             {/* Final Checks */}
             <div className="space-y-4">
               <h3 className="text-lg font-medium text-gray-900">Final Checks</h3>
-              
+
               {localContent.final_checks && localContent.final_checks.length > 0 ? (
                 <div className="space-y-2">
                   {localContent.final_checks.map((check) => (
@@ -268,10 +269,9 @@ export const ContentDetailModal: React.FC<ContentDetailModalProps> = ({
                         disabled={isUpdating}
                         className="mt-0.5 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded disabled:opacity-50"
                       />
-                      <span className={`text-sm flex-1 ${
-                        check.completed ? 'text-gray-500 line-through' : 'text-gray-900'
-                      }`}>
-                        {check.text || check.description}
+                      <span className={`text-sm flex-1 ${check.completed ? 'text-gray-500 line-through' : 'text-gray-900'
+                        }`}>
+                        {check.text}
                       </span>
                       {isUpdating && (
                         <LoadingSpinner size="sm" />
