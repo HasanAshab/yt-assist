@@ -5,7 +5,7 @@ import { useTasks } from '../../hooks/useTasks';
 import { useErrorHandler } from '../../hooks/useErrorHandler';
 import { TaskList } from './TaskList';
 import { TaskForm } from './TaskForm';
-import { TaskFilters as TaskFiltersComponent } from './TaskFilters';
+import { TaskFiltersComponent } from './TaskFilters';
 
 interface TaskManagerProps {
   className?: string;

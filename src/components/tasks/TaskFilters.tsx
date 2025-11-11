@@ -10,7 +10,7 @@ interface TaskFiltersProps {
   className?: string;
 }
 
-export const TaskFilters: React.FC<TaskFiltersProps> = ({
+export const TaskFiltersComponent: React.FC<TaskFiltersProps> = ({
   tasks,
   filters,
   onFilterChange,
