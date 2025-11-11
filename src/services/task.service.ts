@@ -48,7 +48,10 @@ export class TaskService {
         throw new Error('Failed to connect to database. Please check your connection and try again.');
       }
 
-      const expiresAt = taskData.due_date || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+      // Set expiration to midnight of the current day (end of today)
+      const endOfToday = new Date();
+      endOfToday.setHours(23, 59, 59, 999); // Set to 23:59:59.999 of today
+      const expiresAt = taskData.due_date || endOfToday.toISOString();
 
       const { data, error } = await supabase
         .from(TABLES.TASKS)

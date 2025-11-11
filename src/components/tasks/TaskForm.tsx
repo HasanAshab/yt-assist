@@ -178,10 +178,10 @@ export const TaskForm: React.FC<TaskFormProps> = ({
           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
           </svg>
-          <span className="text-sm font-medium">Task Expiration</span>
+          <span className="text-sm font-medium">Daily Task</span>
         </div>
         <p className="mt-1 text-sm text-blue-700">
-          This task will automatically expire at midnight (00:00) and be removed from your task list.
+          This task will automatically expire at the end of today (23:59) and be removed from your task list.
         </p>
       </div>
 

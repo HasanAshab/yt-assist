@@ -23,15 +23,15 @@ export const TaskList: React.FC<TaskListProps> = ({
     const diffMs = now.getTime() - date.getTime();
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
     const diffMinutes = Math.floor(diffMs / (1000 * 60));
-    
+
     if (diffMinutes < 60) {
       return `${diffMinutes}m ago`;
     }
-    
+
     if (diffHours < 24) {
       return `${diffHours}h ago`;
     }
-    
+
     return date.toLocaleDateString();
   };
 
@@ -43,7 +43,7 @@ export const TaskList: React.FC<TaskListProps> = ({
         </svg>
       );
     }
-    
+
     return (
       <svg className="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
         <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
@@ -56,7 +56,7 @@ export const TaskList: React.FC<TaskListProps> = ({
     if ((event.target as HTMLElement).closest('.complete-button')) {
       return;
     }
-    
+
     onTaskClick(task);
   };
 
@@ -64,7 +64,7 @@ export const TaskList: React.FC<TaskListProps> = ({
     <div className={`task-list space-y-3 ${className}`}>
       {tasks.map((task) => {
         const isExpired = TaskService.isTaskExpired(task);
-        
+
         return (
           <div
             key={task.id}
@@ -105,7 +105,7 @@ export const TaskList: React.FC<TaskListProps> = ({
                     </svg>
                     Created {formatCreatedAt(task.created_at)}
                   </span>
-                  
+
                   <span className="flex items-center gap-1 capitalize">
                     <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
