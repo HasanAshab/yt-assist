@@ -374,7 +374,7 @@ export const ContentForm: React.FC<ContentFormProps> = ({
               id="script"
               value={formData.script}
               onChange={(e) => handleInputChange('script', e.target.value)}
-              rows={6}
+              rows={20}
               className={`w-full px-4 py-3 text-base border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 touch-target resize-y ${
                 errors.script ? 'border-red-300' : 'border-gray-300'
               }`}

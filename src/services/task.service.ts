@@ -31,7 +31,8 @@ export class TaskService {
         expires_at: row.expires_at,
         due_date: row.expires_at,
         type: row.type,
-        link: row.link || undefined
+        link: row.link || undefined,
+        assigned_to: row.assigned_to || undefined
       }));
     } catch (error) {
       console.error('Error fetching active tasks:', error);
@@ -56,7 +57,8 @@ export class TaskService {
           description: taskData.description || null,
           type,
           expires_at: expiresAt,
-          link: taskData.link || null
+          link: taskData.link || null,
+          assigned_to: taskData.assigned_to || null
         } as any)
         .select()
         .single();
@@ -81,7 +83,8 @@ export class TaskService {
         expires_at: taskData_result.expires_at,
         due_date: taskData_result.expires_at,
         type: taskData_result.type,
-        link: taskData_result.link || undefined
+        link: taskData_result.link || undefined,
+        assigned_to: taskData_result.assigned_to || undefined
       };
     } catch (error) {
       console.error('Error creating task:', error);
@@ -285,7 +288,8 @@ export class TaskService {
         expires_at: row.expires_at,
         due_date: row.expires_at,
         type: row.type,
-        link: row.link || undefined
+        link: row.link || undefined,
+        assigned_to: row.assigned_to || undefined
       }));
     } catch (error) {
       console.error('Error fetching all tasks:', error);

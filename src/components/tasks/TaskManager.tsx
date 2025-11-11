@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import type { Task, TaskFormData } from '../../types';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import type { Task, TaskFormData, TaskFilters } from '../../types';
 import { TaskService } from '../../services/task.service';
 import { useTasks } from '../../hooks/useTasks';
 import { useErrorHandler } from '../../hooks/useErrorHandler';
 import { TaskList } from './TaskList';
 import { TaskForm } from './TaskForm';
+import { TaskFilters as TaskFiltersComponent } from './TaskFilters';
 
 interface TaskManagerProps {
   className?: string;
@@ -14,6 +15,7 @@ export const TaskManager: React.FC<TaskManagerProps> = ({ className = '' }) => {
   const { tasks, loading, setTasks, addTask, deleteTask, setLoading } = useTasks();
   const { handleError } = useErrorHandler();
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [filters, setFilters] = useState<TaskFilters>({});
   const [statistics, setStatistics] = useState({
     total: 0,
     active: 0,
@@ -114,10 +116,58 @@ export const TaskManager: React.FC<TaskManagerProps> = ({ className = '' }) => {
     if (task.link) {
       TaskService.handleTaskRedirection(task);
     }
-  };  
+  };
 
-  const userTasks = tasks.filter(task => task.type === 'user');
-  const systemTasks = tasks.filter(task => task.type === 'system');
+  // Handle filter changes
+  const handleFilterChange = useCallback((newFilters: Partial<TaskFilters>) => {
+    setFilters(prev => ({ ...prev, ...newFilters }));
+  }, []);
+
+  // Clear all filters
+  const handleClearFilters = useCallback(() => {
+    setFilters({});
+  }, []);
+
+  // Check if any filters are active
+  const hasActiveFilters = useMemo(() => {
+    return !!(filters.assigned_to || filters.type || filters.search);
+  }, [filters]);
+
+  // Filter tasks based on current filters
+  const filteredTasks = useMemo(() => {
+    return tasks.filter(task => {
+      // Search filter - search only in title and description
+      if (filters.search) {
+        const searchTerm = filters.search.toLowerCase().trim();
+        if (searchTerm) {
+          const matchesSearch = 
+            task.title.toLowerCase().includes(searchTerm) ||
+            (task.description && task.description.toLowerCase().includes(searchTerm));
+          
+          if (!matchesSearch) return false;
+        }
+      }
+
+      // Assigned to filter
+      if (filters.assigned_to) {
+        if (filters.assigned_to === '__unassigned__') {
+          if (task.assigned_to && task.assigned_to.trim()) return false;
+        } else {
+          if (task.assigned_to !== filters.assigned_to) return false;
+        }
+      }
+
+      // Type filter
+      if (filters.type && task.type !== filters.type) {
+        return false;
+      }
+
+      return true;
+    });
+  }, [tasks, filters]);
+
+  const userTasks = filteredTasks.filter(task => task.type === 'user');
+  const systemTasks = filteredTasks.filter(task => task.type === 'system');
 
   return (
     <div className={`task-manager ${className}`}>
@@ -162,6 +212,17 @@ export const TaskManager: React.FC<TaskManagerProps> = ({ className = '' }) => {
         </div>
       </div>
 
+      {/* Task Filters */}
+      <div className="mb-6">
+        <TaskFiltersComponent
+          tasks={tasks}
+          filters={filters}
+          onFilterChange={handleFilterChange}
+          onClearFilters={handleClearFilters}
+          hasActiveFilters={hasActiveFilters}
+        />
+      </div>
+
       {/* Create Task Form Modal */}
       {showCreateForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -189,7 +250,7 @@ export const TaskManager: React.FC<TaskManagerProps> = ({ className = '' }) => {
           {/* User Tasks */}
           <div>
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              My Tasks ({userTasks.length})
+              My Tasks ({userTasks.length}{hasActiveFilters ? ` of ${tasks.filter(t => t.type === 'user').length}` : ''})
             </h3>
             {userTasks.length > 0 ? (
               <TaskList
@@ -209,7 +270,7 @@ export const TaskManager: React.FC<TaskManagerProps> = ({ className = '' }) => {
           {systemTasks.length > 0 && (
             <div>
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                System Tasks ({systemTasks.length})
+                System Tasks ({systemTasks.length}{hasActiveFilters ? ` of ${tasks.filter(t => t.type === 'system').length}` : ''})
               </h3>
               <TaskList
                 tasks={systemTasks}

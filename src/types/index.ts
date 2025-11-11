@@ -34,6 +34,7 @@ export interface Task {
   expires_at?: string;
   type?: 'user' | 'system';
   link?: string;
+  assigned_to?: string;
 }
 
 export interface TaskFormData {
@@ -41,6 +42,13 @@ export interface TaskFormData {
   description?: string;
   due_date?: string;
   link?: string;
+  assigned_to?: string;
+}
+
+export interface TaskFilters {
+  assigned_to?: string;
+  type?: 'user' | 'system';
+  search?: string;
 }
 
 // User types

@@ -28,17 +28,18 @@ export const ContentList: React.FC<ContentListProps> = ({
   onContentView,
   showFilters = true,
   showSearch = true,
-  layout = 'grid'
+  layout = 'list'
 }) => {
-  const { 
-    contents, 
-    filters, 
-    loading, 
-    filteredContents, 
-    setFilters 
+  const {
+    contents,
+    filters,
+    loading,
+    filteredContents,
+    setFilters
   } = useContent();
 
   const [localLayout, setLocalLayout] = useState<'grid' | 'list'>(layout);
+  const [showPublished, setShowPublished] = useState(false);
 
   // Handle filter changes
   const handleFilterChange = useCallback((newFilters: Partial<ContentFilters>) => {
@@ -60,15 +61,27 @@ export const ContentList: React.FC<ContentListProps> = ({
     return !!(filters.category || filters.stage !== undefined || filters.search);
   }, [filters]);
 
-  // Get filtered and sorted contents
-  const displayContents = useMemo(() => {
-    return filteredContents.sort((a, b) => {
-      // Sort by stage first (ascending), then by updated_at (descending)
-      if (a.current_stage !== b.current_stage) {
-        return a.current_stage - b.current_stage;
+  // Separate published and unpublished contents
+  const { publishedContents, unpublishedContents } = useMemo(() => {
+    const published: Content[] = [];
+    const unpublished: Content[] = [];
+
+    filteredContents.forEach(content => {
+      if (content.current_stage === 11) { // Published stage
+        published.push(content);
+      } else {
+        unpublished.push(content);
       }
-      return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
     });
+
+    // Sort both lists by updated_at (descending) - most recent first
+    const sortByDate = (a: Content, b: Content) =>
+      new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
+
+    return {
+      publishedContents: published.sort(sortByDate),
+      unpublishedContents: unpublished.sort(sortByDate)
+    };
   }, [filteredContents]);
 
   // Loading state
@@ -95,27 +108,25 @@ export const ContentList: React.FC<ContentListProps> = ({
               />
             )}
           </div>
-          
+
           <div className="flex items-center justify-center sm:justify-end flex-shrink-0">
             {/* Layout toggle */}
             <div className="flex bg-gray-100 rounded-lg p-1 w-full sm:w-auto max-w-xs sm:max-w-none">
               <button
                 onClick={() => setLocalLayout('grid')}
-                className={`flex-1 sm:flex-none px-4 py-2 sm:px-3 sm:py-1 rounded text-base sm:text-sm font-medium transition-colors touch-target ${
-                  localLayout === 'grid'
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
+                className={`flex-1 sm:flex-none px-4 py-2 sm:px-3 sm:py-1 rounded text-base sm:text-sm font-medium transition-colors touch-target ${localLayout === 'grid'
+                  ? 'bg-white text-gray-900 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+                  }`}
               >
                 Grid
               </button>
               <button
                 onClick={() => setLocalLayout('list')}
-                className={`flex-1 sm:flex-none px-4 py-2 sm:px-3 sm:py-1 rounded text-base sm:text-sm font-medium transition-colors touch-target ${
-                  localLayout === 'list'
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
+                className={`flex-1 sm:flex-none px-4 py-2 sm:px-3 sm:py-1 rounded text-base sm:text-sm font-medium transition-colors touch-target ${localLayout === 'list'
+                  ? 'bg-white text-gray-900 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+                  }`}
               >
                 List
               </button>
@@ -137,10 +148,13 @@ export const ContentList: React.FC<ContentListProps> = ({
       {/* Results summary */}
       <div className="flex flex-col sm:flex-row gap-2 sm:items-center sm:justify-between text-base sm:text-sm text-gray-600">
         <span>
-          {displayContents.length} of {contents.length} content{contents.length !== 1 ? 's' : ''}
+          {unpublishedContents.length + publishedContents.length} of {contents.length} content{contents.length !== 1 ? 's' : ''}
           {hasActiveFilters && ' (filtered)'}
+          {unpublishedContents.length > 0 && publishedContents.length > 0 &&
+            ` • ${unpublishedContents.length} in progress, ${publishedContents.length} published`
+          }
         </span>
-        
+
         {hasActiveFilters && (
           <button
             onClick={handleClearFilters}
@@ -151,12 +165,12 @@ export const ContentList: React.FC<ContentListProps> = ({
         )}
       </div>
 
-      {/* Content list */}
-      {displayContents.length === 0 ? (
+      {/* Content lists */}
+      {unpublishedContents.length === 0 && publishedContents.length === 0 ? (
         <EmptyState
           title={hasActiveFilters ? "No content matches your filters" : "No content yet"}
           description={
-            hasActiveFilters 
+            hasActiveFilters
               ? "Try adjusting your filters or search terms to find content."
               : "Create your first piece of content to get started with your pipeline."
           }
@@ -171,36 +185,112 @@ export const ContentList: React.FC<ContentListProps> = ({
             ) : undefined
           }
         />
-      ) : displayContents.length > 50 ? (
-        // Use virtualized list for large datasets
-        <VirtualizedContentList
-          contents={displayContents}
-          layout={localLayout}
-          onContentSelect={onContentSelect}
-          onContentEdit={onContentEdit}
-          onContentDelete={onContentDelete}
-          onContentView={onContentView}
-        />
       ) : (
-        // Use regular rendering for smaller datasets
-        <div
-          className={
-            localLayout === 'grid'
-              ? 'responsive-grid w-full'
-              : 'space-y-4 w-full'
-          }
-        >
-          {displayContents.map((content) => (
-            <ContentCard
-              key={content.id}
-              content={content}
-              layout={localLayout}
-              onSelect={onContentSelect}
-              onEdit={onContentEdit}
-              onDelete={onContentDelete}
-              onView={onContentView}
-            />
-          ))}
+        <div className="space-y-8">
+          {/* Unpublished Content */}
+          {unpublishedContents.length > 0 && (
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2">
+                In Progress ({unpublishedContents.length})
+              </h3>
+              {unpublishedContents.length > 50 ? (
+                <VirtualizedContentList
+                  contents={unpublishedContents}
+                  layout={localLayout}
+                  onContentSelect={onContentSelect}
+                  onContentEdit={onContentEdit}
+                  onContentDelete={onContentDelete}
+                  onContentView={onContentView}
+                />
+              ) : (
+                <div
+                  className={
+                    localLayout === 'grid'
+                      ? 'responsive-grid w-full'
+                      : 'space-y-4 w-full'
+                  }
+                >
+                  {unpublishedContents.map((content) => (
+                    <ContentCard
+                      key={content.id}
+                      content={content}
+                      layout={localLayout}
+                      onSelect={onContentSelect}
+                      onEdit={onContentEdit}
+                      onDelete={onContentDelete}
+                      onView={onContentView}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Published Content Toggle */}
+          {publishedContents.length > 0 && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between border-b border-gray-200 pb-2">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Published ({publishedContents.length})
+                </h3>
+                <button
+                  onClick={() => setShowPublished(!showPublished)}
+                  className="inline-flex items-center px-3 py-1 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
+                >
+                  {showPublished ? (
+                    <>
+                      <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                      </svg>
+                      Hide
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                      Show
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {showPublished && (
+                <>
+                  {publishedContents.length > 50 ? (
+                    <VirtualizedContentList
+                      contents={publishedContents}
+                      layout={localLayout}
+                      onContentSelect={onContentSelect}
+                      onContentEdit={onContentEdit}
+                      onContentDelete={onContentDelete}
+                      onContentView={onContentView}
+                    />
+                  ) : (
+                    <div
+                      className={
+                        localLayout === 'grid'
+                          ? 'responsive-grid w-full'
+                          : 'space-y-4 w-full'
+                      }
+                    >
+                      {publishedContents.map((content) => (
+                        <ContentCard
+                          key={content.id}
+                          content={content}
+                          layout={localLayout}
+                          onSelect={onContentSelect}
+                          onEdit={onContentEdit}
+                          onDelete={onContentDelete}
+                          onView={onContentView}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -18,7 +18,8 @@ export const TaskForm: React.FC<TaskFormProps> = ({
   const [formData, setFormData] = useState<TaskFormData>({
     title: initialData.title || '',
     description: initialData.description || '',
-    link: initialData.link || ''
+    link: initialData.link || '',
+    assigned_to: initialData.assigned_to || ''
   });
   
   const [errors, setErrors] = useState<string[]>([]);
@@ -129,6 +130,26 @@ export const TaskForm: React.FC<TaskFormProps> = ({
         />
         <div className="mt-1 text-xs text-gray-500">
           {formData.description.length}/1000 characters
+        </div>
+      </div>
+
+      {/* Assigned To Field */}
+      <div className="mb-4">
+        <label htmlFor="task-assigned-to" className="block text-sm font-medium text-gray-700 mb-2">
+          Assigned To
+        </label>
+        <input
+          id="task-assigned-to"
+          type="text"
+          value={formData.assigned_to}
+          onChange={(e) => handleInputChange('assigned_to', e.target.value)}
+          placeholder="Enter assignee name..."
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+          maxLength={100}
+          disabled={isSubmitting}
+        />
+        <div className="mt-1 text-xs text-gray-500">
+          Optional: Name or identifier of the person assigned to this task
         </div>
       </div>
 

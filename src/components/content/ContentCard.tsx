@@ -186,10 +186,10 @@ export const ContentCard: React.FC<ContentCardProps> = ({
           <span className={`text-sm font-medium flex-shrink-0 ${getStageColor(content.current_stage)}`}>
             {currentStage}
           </span>
-          <StageIndicator 
+          {/* <StageIndicator 
             currentStage={content.current_stage}
             size="sm"
-          />
+          /> */}
         </div>
         
         {/* Progress bar */}
