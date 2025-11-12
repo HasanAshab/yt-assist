@@ -380,6 +380,7 @@ export const ContentForm: React.FC<ContentFormProps> = ({
               }`}
               placeholder="Enter content script"
               disabled={isSubmitting}
+              spellCheck={false}
             />
             {errors.script && (
               <p className="mt-2 text-base sm:text-sm text-red-600">{errors.script}</p>

@@ -218,7 +218,7 @@ export const ContentDetailModal: React.FC<ContentDetailModalProps> = ({
               {localContent.script && (
                 <div className="w-full">
                   <label className="block text-base sm:text-sm font-medium text-gray-700 mb-2">Script</label>
-                  <div className="text-base sm:text-sm text-gray-900 bg-gray-50 rounded-lg p-4 max-h-48 sm:max-h-32 overflow-y-auto overflow-x-hidden w-full">
+                  <div className="text-base sm:text-sm text-gray-900 bg-gray-50 rounded-lg p-4 max-h-100 sm:max-h-32 overflow-y-auto overflow-x-hidden w-full">
                     <pre className="whitespace-pre-wrap font-sans leading-relaxed text-safe w-full">{localContent.script}</pre>
                   </div>
                 </div>
